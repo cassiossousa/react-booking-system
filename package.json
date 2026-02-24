@@ -4,10 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "build": "tsc && vite build",
+    "cypress": "cypress open",
     "dev": "vite",
-    "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest",
+    "test-cov": "vitest --coverage",
+    "test-watch": "vitest --watch --coverage"
   },
   "dependencies": {
     "@hookform/resolvers": "5.2.2",
@@ -21,15 +25,21 @@
     "zod": "4.3.6"
   },
   "devDependencies": {
+    "@eslint/js": "10.0.1",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.2",
+    "@testing-library/user-event": "14.6.1",
     "@types/react-dom": "19.2.3",
     "@types/styled-components": "5.1.36",
     "@vitejs/plugin-react": "5.1.4",
+    "@vitest/coverage-v8": "4.0.18",
     "cypress": "15.10.0",
     "eslint": "10.0.2",
     "eslint-config-prettier": "10.1.8",
+    "globals": "17.3.0",
+    "jsdom": "28.1.0",
     "prettier": "3.8.1",
+    "typescript-eslint": "8.56.1",
     "vitest": "4.0.18"
   }
 }

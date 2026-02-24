@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Coverage files (v8)
+coverage/
+
+# Vite timestamps
+vite.config.ts.timestamp-*

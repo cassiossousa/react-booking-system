@@ -67,8 +67,8 @@ date-fns
 ```
 src/
  ├── app/
- │    ├── store.ts
- │    └── hooks.ts
+ │    ├── hooks.ts
+ │    └── store.ts
  │
  ├── features/
  │    └── bookings/
@@ -86,7 +86,7 @@ src/
  │    └── UI/
  │
  ├── pages/
- │    └── BookingPage.tsx
+ │    └── BookingPage.ts
  │
  ├── styles/
  │    └── theme.ts
@@ -94,7 +94,7 @@ src/
  ├── utils/
  │    └── date.ts
  │
- └── main.tsx
+ └── main.ts
 ```
 
 ### 7.1. Why?

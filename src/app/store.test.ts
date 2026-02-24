@@ -1,0 +1,48 @@
+import { describe, it, expect } from 'vitest';
+import { store } from './store';
+import type { RootState, AppDispatch } from './store';
+
+describe('Redux Store', () => {
+  it('should have initial state', () => {
+    const state = store.getState();
+
+    expect(state).toBeDefined();
+    expect(state.bookings).toBeDefined();
+    expect(state.bookings.entities).toEqual({});
+    expect(state.bookings.ids).toEqual([]);
+    expect(state.bookings.selectedBookingId).toBeNull();
+    expect(state.bookings.error).toBeNull();
+  });
+
+  it('should provide correct RootState type inference', () => {
+    const state: RootState = store.getState();
+
+    expect(state.bookings).toBeDefined();
+    expect(typeof state.bookings.entities).toBe('object');
+    expect(Array.isArray(state.bookings.ids)).toBe(true);
+  });
+
+  it('should have correct dispatch type', () => {
+    const dispatch: AppDispatch = store.dispatch;
+
+    expect(typeof dispatch).toBe('function');
+  });
+
+  it('should be able to subscribe to state changes', () => {
+    const listener = () => {};
+    const unsubscribe = store.subscribe(listener);
+
+    expect(typeof unsubscribe).toBe('function');
+    unsubscribe();
+  });
+
+  it('should have bookings reducer', () => {
+    const state = store.getState();
+
+    expect(state.bookings).toBeDefined();
+    expect(state.bookings.entities).toBeDefined();
+    expect(state.bookings.ids).toBeDefined();
+    expect(state.bookings.selectedBookingId).toBeDefined();
+    expect(state.bookings.error).toBeDefined();
+  });
+});

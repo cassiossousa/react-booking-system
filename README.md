@@ -35,7 +35,7 @@ npm install
 npm run dev
 ```
 
-Runs at: [http://localhost:5173](http://localhost:5173)
+Runs at: [http://localhost:5175](http://localhost:5175)
 
 ## Running Tests
 
