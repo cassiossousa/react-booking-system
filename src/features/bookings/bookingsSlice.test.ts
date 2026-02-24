@@ -1,319 +1,180 @@
-import { describe, it, expect } from 'vitest';
-import bookingsReducer, {
+import reducer, {
   addBooking,
   updateBooking,
   deleteBooking,
-  selectBooking,
+  setEditingBooking,
   clearError,
+  type Booking,
 } from './bookingsSlice';
-import type { Booking, BookingsState } from './bookings.types';
+import { describe, it, expect } from 'vitest';
 
 describe('bookingsSlice', () => {
-  const initialState: BookingsState = {
-    entities: {},
-    ids: [],
-    selectedBookingId: null,
-    error: null,
-  };
-
-  const mockBooking: Booking = {
-    id: '1',
-    propertyId: 'prop1',
-    propertyName: 'Property 1',
+  const baseBooking: Omit<Booking, 'id'> = {
+    propertyId: 'p1',
+    propertyName: 'Beach House',
     guestName: 'John Doe',
     startDate: '2025-01-01',
-    endDate: '2025-01-10',
+    endDate: '2025-01-05',
   };
 
-  const mockBooking2: Booking = {
-    id: '2',
-    propertyId: 'prop2',
-    propertyName: 'Property 2',
-    guestName: 'Jane Doe',
-    startDate: '2025-01-15',
-    endDate: '2025-01-20',
-  };
-
-  describe('addBooking', () => {
-    it('should add a valid booking', () => {
-      const state = bookingsReducer(initialState, addBooking(mockBooking));
-
-      expect(state.entities['1']).toEqual(mockBooking);
-      expect(state.ids).toContain('1');
-      expect(state.error).toBeNull();
-    });
-
-    it('should set error for invalid date range', () => {
-      const invalidBooking: Booking = {
-        id: '3',
-        propertyId: 'prop3',
-        propertyName: 'Property 3',
-        guestName: 'Invalid',
-        startDate: '2025-01-10',
-        endDate: '2025-01-01',
-      };
-
-      const state = bookingsReducer(initialState, addBooking(invalidBooking));
-
-      expect(state.error).toBe('Invalid date range');
-      expect(state.ids).toHaveLength(0);
-    });
-
-    it('should set error for overlapping booking', () => {
-      let state = bookingsReducer(initialState, addBooking(mockBooking));
-
-      const overlappingBooking: Booking = {
-        id: '2',
-        propertyId: 'prop2',
-        propertyName: 'Property 2',
-        guestName: 'Overlapping',
-        startDate: '2025-01-05',
-        endDate: '2025-01-15',
-      };
-
-      state = bookingsReducer(state, addBooking(overlappingBooking));
-
-      expect(state.error).toBe('Booking overlaps with existing booking');
-      expect(state.ids).toHaveLength(1);
-    });
-
-    it('should allow overlapping bookings for different properties', () => {
-      let state = bookingsReducer(initialState, addBooking(mockBooking));
-
-      const bookingDifferentProperty: Booking = {
-        id: '3',
-        propertyId: 'prop3',
-        propertyName: 'Property 3',
-        guestName: 'Different Property',
-        startDate: '2025-01-05',
-        endDate: '2025-01-15',
-      };
-
-      state = bookingsReducer(state, addBooking(bookingDifferentProperty));
-
-      expect(state.ids).toHaveLength(2);
-      expect(state.error).toBeNull();
-    });
-
-    it('should add multiple non-overlapping bookings', () => {
-      let state = bookingsReducer(initialState, addBooking(mockBooking));
-      state = bookingsReducer(state, addBooking(mockBooking2));
-
-      expect(state.ids).toHaveLength(2);
-      expect(state.entities['1']).toEqual(mockBooking);
-      expect(state.entities['2']).toEqual(mockBooking2);
-    });
-
-    it('should handle edge case with adjacent dates', () => {
-      let state = bookingsReducer(initialState, addBooking(mockBooking));
-
-      const nonOverlappingBooking: Booking = {
-        id: '3',
-        propertyId: 'prop3',
-        propertyName: 'Property 3',
-        guestName: 'Non-overlapping',
-        startDate: '2025-01-11',
-        endDate: '2025-01-15',
-      };
-
-      state = bookingsReducer(state, addBooking(nonOverlappingBooking));
-
-      expect(state.ids).toHaveLength(2);
-      expect(state.error).toBeNull();
-    });
+  it('should return initial state', () => {
+    const state = reducer(undefined, { type: 'unknown' });
+    expect(state.items).toEqual([]);
+    expect(state.editing).toBeNull();
+    expect(state.error).toBeNull();
   });
 
-  describe('updateBooking', () => {
-    it('should update existing booking', () => {
-      let state = bookingsReducer(initialState, addBooking(mockBooking));
+  it('adds booking successfully', () => {
+    const state = reducer(undefined, addBooking(baseBooking));
 
-      const updatedBooking: Booking = {
-        id: '1',
-        propertyId: 'prop1',
-        propertyName: 'Property 1',
-        guestName: 'John Doe Updated',
-        startDate: '2025-01-01',
-        endDate: '2025-01-10',
-      };
+    expect(state.items.length).toBe(1);
+    expect(state.items[0].guestName).toBe('John Doe');
+    expect(state.error).toBeNull();
+  });
 
-      state = bookingsReducer(state, updateBooking(updatedBooking));
-
-      expect(state.entities['1']).toEqual(updatedBooking);
-      expect(state.error).toBeNull();
-    });
-
-    it('should update non-existent booking and store it', () => {
-      let state = bookingsReducer(initialState, addBooking(mockBooking));
-
-      const newBooking: Booking = {
-        id: '999',
-        propertyId: 'prop3',
-        propertyName: 'Property 3',
-        guestName: 'Non-existent',
-        startDate: '2025-02-01',
-        endDate: '2025-02-10',
-      };
-
-      state = bookingsReducer(state, updateBooking(newBooking));
-
-      expect(state.entities['999']).toEqual(newBooking);
-      expect(state.error).toBeNull();
-    });
-
-    it('should set error for invalid date range when updating', () => {
-      let state = bookingsReducer(initialState, addBooking(mockBooking));
-
-      const invalidBooking: Booking = {
-        id: '1',
-        propertyId: 'prop1',
-        propertyName: 'Property 1',
-        guestName: 'Invalid',
+  it('rejects invalid date range', () => {
+    const state = reducer(
+      undefined,
+      addBooking({
+        ...baseBooking,
         startDate: '2025-01-10',
-        endDate: '2025-01-01',
-      };
+        endDate: '2025-01-05',
+      }),
+    );
 
-      state = bookingsReducer(state, updateBooking(invalidBooking));
+    expect(state.items.length).toBe(0);
+    expect(state.error).toBe('End date must be after start date.');
+  });
 
-      expect(state.error).toBe('Invalid date range');
-      expect(state.entities['1']).toEqual(mockBooking);
-    });
+  it('rejects overlapping booking', () => {
+    const firstState = reducer(undefined, addBooking(baseBooking));
 
-    it('should set error for overlapping booking when updating', () => {
-      let state = bookingsReducer(initialState, addBooking(mockBooking));
-      state = bookingsReducer(state, addBooking(mockBooking2));
+    const secondState = reducer(
+      firstState,
+      addBooking({
+        ...baseBooking,
+        startDate: '2025-01-03',
+        endDate: '2025-01-06',
+      }),
+    );
 
-      const conflictingUpdate: Booking = {
-        id: '2',
-        propertyId: 'prop2',
-        propertyName: 'Property 2',
-        guestName: 'Jane Doe Updated',
-        startDate: '2025-01-05',
+    expect(secondState.items.length).toBe(1);
+    expect(secondState.error).toBe(
+      'Booking overlaps with an existing booking for this property.',
+    );
+  });
+
+  it('updates booking successfully', () => {
+    const state1 = reducer(undefined, addBooking(baseBooking));
+    const booking = state1.items[0];
+
+    const updated: Booking = {
+      ...booking,
+      guestName: 'Jane Doe',
+      startDate: '2025-01-06',
+      endDate: '2025-01-10',
+    };
+
+    const state2 = reducer(state1, updateBooking(updated));
+
+    expect(state2.items[0].guestName).toBe('Jane Doe');
+    expect(state2.error).toBeNull();
+  });
+
+  it('rejects update with invalid date', () => {
+    const state1 = reducer(undefined, addBooking(baseBooking));
+    const booking = state1.items[0];
+
+    const state2 = reducer(
+      state1,
+      updateBooking({
+        ...booking,
+        startDate: '2025-01-10',
+        endDate: '2025-01-05',
+      }),
+    );
+
+    expect(state2.error).toBe('End date must be after start date.');
+  });
+
+  it('rejects update with overlapping dates', () => {
+    const state1 = reducer(undefined, addBooking(baseBooking));
+
+    const state2 = reducer(
+      state1,
+      addBooking({
+        propertyId: 'p1',
+        propertyName: 'Beach House',
+        guestName: 'Second Guest',
+        startDate: '2025-01-06',
+        endDate: '2025-01-10',
+      }),
+    );
+
+    const firstBooking = state2.items[0];
+
+    const state3 = reducer(
+      state2,
+      updateBooking({
+        ...firstBooking,
+        startDate: '2025-01-08',
         endDate: '2025-01-12',
-      };
+      }),
+    );
 
-      state = bookingsReducer(state, updateBooking(conflictingUpdate));
+    expect(state3.error).toBe(
+      'Booking overlaps with an existing booking for this property.',
+    );
+  });
 
-      expect(state.error).toBe('Booking overlaps with existing booking');
-      expect(state.entities['2']).toEqual(mockBooking2);
-    });
-
-    it('should allow updating same booking without overlap error', () => {
-      let state = bookingsReducer(initialState, addBooking(mockBooking));
-
-      const sameBookingUpdated: Booking = {
-        id: '1',
-        propertyId: 'prop1',
-        propertyName: 'Property 1',
-        guestName: 'Same Booking Updated',
+  it('rejects update if booking not found', () => {
+    const state = reducer(
+      undefined,
+      updateBooking({
+        id: 'does-not-exist',
+        propertyId: 'p1',
+        propertyName: 'Beach House',
+        guestName: 'Ghost',
         startDate: '2025-01-01',
-        endDate: '2025-01-10',
-      };
+        endDate: '2025-01-05',
+      }),
+    );
 
-      state = bookingsReducer(state, updateBooking(sameBookingUpdated));
-
-      expect(state.entities['1']).toEqual(sameBookingUpdated);
-      expect(state.error).toBeNull();
-    });
+    expect(state.error).toBe('Booking not found.');
   });
 
-  describe('deleteBooking', () => {
-    it('should delete booking by id', () => {
-      let state = bookingsReducer(initialState, addBooking(mockBooking));
-      state = bookingsReducer(state, addBooking(mockBooking2));
+  it('deletes booking', () => {
+    const state1 = reducer(undefined, addBooking(baseBooking));
+    const bookingId = state1.items[0].id;
 
-      state = bookingsReducer(state, deleteBooking('1'));
+    const state2 = reducer(state1, deleteBooking(bookingId));
 
-      expect(state.ids).toHaveLength(1);
-      expect(state.ids[0]).toBe('2');
-      expect(state.entities['1']).toBeUndefined();
-    });
-
-    it('should not fail when deleting non-existent booking', () => {
-      let state = bookingsReducer(initialState, addBooking(mockBooking));
-
-      state = bookingsReducer(state, deleteBooking('999'));
-
-      expect(state.ids).toHaveLength(1);
-    });
-
-    it('should delete from empty list without error', () => {
-      const state = bookingsReducer(initialState, deleteBooking('1'));
-
-      expect(state.ids).toHaveLength(0);
-    });
-
-    it('should delete all bookings one by one', () => {
-      let state = bookingsReducer(initialState, addBooking(mockBooking));
-      state = bookingsReducer(state, addBooking(mockBooking2));
-
-      state = bookingsReducer(state, deleteBooking('1'));
-      expect(state.ids).toHaveLength(1);
-
-      state = bookingsReducer(state, deleteBooking('2'));
-      expect(state.ids).toHaveLength(0);
-    });
+    expect(state2.items.length).toBe(0);
   });
 
-  describe('selectBooking', () => {
-    it('should select a booking by id', () => {
-      let state = bookingsReducer(initialState, addBooking(mockBooking));
+  it('sets editing booking', () => {
+    const state1 = reducer(undefined, addBooking(baseBooking));
+    const booking = state1.items[0];
 
-      state = bookingsReducer(state, selectBooking('1'));
+    const state2 = reducer(state1, setEditingBooking(booking));
 
-      expect(state.selectedBookingId).toBe('1');
-    });
-
-    it('should deselect when passing null', () => {
-      let state = bookingsReducer(initialState, addBooking(mockBooking));
-      state = bookingsReducer(state, selectBooking('1'));
-
-      state = bookingsReducer(state, selectBooking(null));
-
-      expect(state.selectedBookingId).toBeNull();
-    });
-
-    it('should replace previous selection', () => {
-      let state = bookingsReducer(initialState, addBooking(mockBooking));
-      state = bookingsReducer(state, addBooking(mockBooking2));
-
-      state = bookingsReducer(state, selectBooking('1'));
-      expect(state.selectedBookingId).toBe('1');
-
-      state = bookingsReducer(state, selectBooking('2'));
-      expect(state.selectedBookingId).toBe('2');
-    });
-
-    it('should select non-existent booking id', () => {
-      const state = bookingsReducer(initialState, selectBooking('999'));
-
-      expect(state.selectedBookingId).toBe('999');
-    });
+    expect(state2.editing).toEqual(booking);
   });
 
-  describe('clearError', () => {
-    it('should clear error message', () => {
-      const invalidBooking: Booking = {
-        id: '1',
-        propertyId: 'prop1',
-        propertyName: 'Property 1',
-        guestName: 'Invalid',
+  it('clears error', () => {
+    const state1 = reducer(
+      undefined,
+      addBooking({
+        ...baseBooking,
         startDate: '2025-01-10',
-        endDate: '2025-01-01',
-      };
+        endDate: '2025-01-05',
+      }),
+    );
 
-      let state = bookingsReducer(initialState, addBooking(invalidBooking));
-      expect(state.error).not.toBeNull();
+    expect(state1.error).not.toBeNull();
 
-      state = bookingsReducer(state, clearError());
-      expect(state.error).toBeNull();
-    });
-  });
+    const state2 = reducer(state1, clearError());
 
-  describe('initial state', () => {
-    it('should return initial state when called with undefined action', () => {
-      const state = bookingsReducer(undefined, { type: 'unknown' });
-
-      expect(state).toEqual(initialState);
-    });
+    expect(state2.error).toBeNull();
   });
 });

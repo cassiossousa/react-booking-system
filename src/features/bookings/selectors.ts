@@ -1,25 +1,51 @@
 import { createSelector } from '@reduxjs/toolkit';
+import { isPast } from 'date-fns';
 import type { RootState } from '../../app/store';
+import { isOverlapping } from './domain/date.utils';
 
-const selectBookingsState = (state: RootState) => state.bookings;
+/**
+ * Base selector
+ */
+export const selectBookingState = (state: RootState) => state.bookings;
 
+/**
+ * All bookings
+ */
 export const selectAllBookings = createSelector(
-  [selectBookingsState],
-  (bookingsState) => bookingsState.ids.map((id) => bookingsState.entities[id]),
+  selectBookingState,
+  (bookingState) => bookingState.items,
 );
 
-export const selectBookingEntities = createSelector(
-  [selectBookingsState],
-  (state) => state.entities,
+/**
+ * Booking by ID
+ */
+export const selectBookingById = (id: string) =>
+  createSelector(selectAllBookings, (bookings) =>
+    bookings.find((b) => b.id === id),
+  );
+
+/**
+ * Active bookings (not past)
+ */
+export const selectActiveBookings = createSelector(
+  selectAllBookings,
+  (bookings) => bookings.filter((b) => !isPast(b.endDate)),
 );
 
-export const selectSelectedBooking = createSelector(
-  [selectBookingsState],
-  (state) =>
-    state.selectedBookingId ? state.entities[state.selectedBookingId] : null,
+/**
+ * Past bookings
+ */
+export const selectPastBookings = createSelector(
+  selectAllBookings,
+  (bookings) => bookings.filter((b) => isPast(b.endDate)),
 );
 
-export const selectError = createSelector(
-  [selectBookingsState],
-  (state) => state.error,
-);
+/**
+ * Overlapping bookings within a given range
+ */
+export const selectOverlappingBookings = (startDate: string, endDate: string) =>
+  createSelector(selectAllBookings, (bookings) =>
+    bookings.filter((b) =>
+      isOverlapping(startDate, endDate, b.startDate, b.endDate),
+    ),
+  );
