@@ -44,3 +44,15 @@ export const ErrorBanner = styled.div`
   padding: 0.75rem;
   border-radius: 6px;
 `;
+
+export const PropertySection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
+export const PropertyTitle = styled.h3`
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.textPrimary};
+`;

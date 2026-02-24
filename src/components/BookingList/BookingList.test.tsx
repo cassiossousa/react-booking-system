@@ -2,12 +2,14 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
+import { ThemeProvider } from 'styled-components';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import BookingList from './BookingList';
 import bookingsReducer, {
   addBooking,
 } from '../../features/bookings/bookingsSlice';
+import { theme } from '../../styles/theme';
 
 describe('BookingList', () => {
   let store: ReturnType<
@@ -25,7 +27,9 @@ describe('BookingList', () => {
   const renderBookingList = () => {
     return render(
       <Provider store={store}>
-        <BookingList />
+        <ThemeProvider theme={theme}>
+          <BookingList />
+        </ThemeProvider>
       </Provider>,
     );
   };

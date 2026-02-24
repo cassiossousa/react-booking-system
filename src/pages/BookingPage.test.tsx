@@ -1,10 +1,12 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { ThemeProvider } from 'styled-components';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import BookingPage from './BookingPage';
 import bookingsReducer from '../features/bookings/bookingsSlice';
+import { theme } from '../styles/theme';
 
 // Mock the child components
 vi.mock('../components/BookingForm/BookingForm', () => ({
@@ -25,7 +27,9 @@ describe('BookingPage', () => {
   const renderBookingPage = () => {
     return render(
       <Provider store={store}>
-        <BookingPage />
+        <ThemeProvider theme={theme}>
+          <BookingPage />
+        </ThemeProvider>
       </Provider>,
     );
   };
@@ -35,7 +39,7 @@ describe('BookingPage', () => {
       renderBookingPage();
       expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
       expect(
-        screen.getByRole('heading', { name: 'Holonic Booking Manager' }),
+        screen.getByRole('heading', { name: 'Booking Manager' }),
       ).toBeInTheDocument();
     });
 
@@ -72,7 +76,7 @@ describe('BookingPage', () => {
     it('should display all main content sections', () => {
       renderBookingPage();
       const heading = screen.getByRole('heading', {
-        name: 'Holonic Booking Manager',
+        name: 'Booking Manager',
       });
       const form = screen.getByTestId('booking-form');
       const list = screen.getByTestId('booking-list');
@@ -85,7 +89,7 @@ describe('BookingPage', () => {
     it('should render page in proper hierarchy', () => {
       const { container } = renderBookingPage();
       screen.getByRole('heading', {
-        name: 'Holonic Booking Manager',
+        name: 'Booking Manager',
       });
       screen.getByTestId('booking-form');
       screen.getByTestId('booking-list');
@@ -111,7 +115,7 @@ describe('BookingPage', () => {
     it('should render a complete booking page application', () => {
       renderBookingPage();
       expect(
-        screen.getByRole('heading', { name: 'Holonic Booking Manager' }),
+        screen.getByRole('heading', { name: 'Booking Manager' }),
       ).toBeInTheDocument();
       expect(screen.getByTestId('booking-form')).toBeInTheDocument();
       expect(screen.getByTestId('booking-list')).toBeInTheDocument();
@@ -120,7 +124,7 @@ describe('BookingPage', () => {
     it('should have heading before form and list', () => {
       const { container } = renderBookingPage();
       const heading = screen.getByRole('heading', {
-        name: 'Holonic Booking Manager',
+        name: 'Booking Manager',
       });
       const form = screen.getByTestId('booking-form');
       const list = screen.getByTestId('booking-list');
@@ -159,7 +163,7 @@ describe('BookingPage', () => {
       screen.getByTestId('booking-list');
 
       expect(
-        screen.getByRole('heading', { name: 'Holonic Booking Manager' }),
+        screen.getByRole('heading', { name: 'Booking Manager' }),
       ).toBeInTheDocument();
       expect(screen.getByTestId('booking-form')).toBeInTheDocument();
       expect(screen.getByTestId('booking-list')).toBeInTheDocument();

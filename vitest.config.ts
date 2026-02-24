@@ -12,7 +12,7 @@ export default defineConfig({
     watch: false,
     coverage: {
       provider: 'v8',
-      exclude: [...(configDefaults.coverage.exclude || [])],
+      exclude: [...(configDefaults.coverage.exclude || []), 'src/styles/*.ts'],
     },
   },
 });

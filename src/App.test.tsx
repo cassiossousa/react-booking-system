@@ -1,10 +1,12 @@
 import '@testing-library/jest-dom';
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { ThemeProvider } from 'styled-components';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import App from './App';
 import bookingsReducer from './features/bookings/bookingsSlice';
+import { theme } from './styles/theme';
 
 describe('App Component', () => {
   const store = configureStore({
@@ -16,7 +18,9 @@ describe('App Component', () => {
   const renderApp = () => {
     return render(
       <Provider store={store}>
-        <App />
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
       </Provider>,
     );
   };
@@ -24,14 +28,14 @@ describe('App Component', () => {
   it('should render without crashing', () => {
     renderApp();
     expect(
-      screen.getByRole('heading', { name: 'Holonic Booking Manager' }),
+      screen.getByRole('heading', { name: 'Booking Manager' }),
     ).toBeInTheDocument();
   });
 
   it('should render BookingPage component', () => {
     renderApp();
     expect(
-      screen.getByRole('heading', { name: 'Holonic Booking Manager' }),
+      screen.getByRole('heading', { name: 'Booking Manager' }),
     ).toBeInTheDocument();
   });
 
@@ -50,7 +54,7 @@ describe('App Component', () => {
   it('should render the main heading', () => {
     renderApp();
     const heading = screen.getByRole('heading', {
-      name: 'Holonic Booking Manager',
+      name: 'Booking Manager',
     });
     expect(heading).toBeInTheDocument();
   });
