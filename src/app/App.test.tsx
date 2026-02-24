@@ -28,14 +28,14 @@ describe('App Component', () => {
   it('should render without crashing', () => {
     renderApp();
     expect(
-      screen.getByRole('heading', { name: 'Booking Manager' }),
+      screen.getByRole('heading', { name: 'Property Bookings' }),
     ).toBeInTheDocument();
   });
 
   it('should render BookingPage component', () => {
     renderApp();
     expect(
-      screen.getByRole('heading', { name: 'Booking Manager' }),
+      screen.getByRole('heading', { name: 'Property Bookings' }),
     ).toBeInTheDocument();
   });
 
@@ -54,7 +54,7 @@ describe('App Component', () => {
   it('should render the main heading', () => {
     renderApp();
     const heading = screen.getByRole('heading', {
-      name: 'Booking Manager',
+      name: 'Property Bookings',
     });
     expect(heading).toBeInTheDocument();
   });

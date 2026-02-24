@@ -39,9 +39,9 @@ describe('Custom Redux Hooks', () => {
   });
 
   describe('useAppSelector', () => {
-    it('should return selected state', () => {
+    it('should return selected state (items array)', () => {
       const { result } = renderHook(
-        () => useAppSelector((state) => state.bookings.ids),
+        () => useAppSelector((state) => state.bookings.items),
         { wrapper },
       );
 
@@ -49,30 +49,29 @@ describe('Custom Redux Hooks', () => {
       expect(result.current).toEqual([]);
     });
 
-    it('should return selected booking id', () => {
+    it('should return editing state (null by default)', () => {
       const { result } = renderHook(
-        () => useAppSelector((state) => state.bookings.selectedBookingId),
+        () => useAppSelector((state) => state.bookings.editing),
         { wrapper },
       );
 
       expect(result.current).toBeNull();
     });
 
-    it('should select specific property from state', () => {
+    it('should select booking slice with expected shape', () => {
       const { result } = renderHook(
         () => useAppSelector((state) => state.bookings),
         { wrapper },
       );
 
-      expect(result.current.entities).toBeDefined();
-      expect(result.current.selectedBookingId).toBeDefined();
-      expect(result.current.ids).toBeDefined();
+      expect(result.current.items).toBeDefined();
+      expect(result.current.editing).toBeDefined();
       expect(result.current.error).toBeDefined();
     });
 
-    it('should provide typed selector', () => {
+    it('should provide typed selector (items length)', () => {
       const { result } = renderHook(
-        () => useAppSelector((state) => state.bookings.ids.length),
+        () => useAppSelector((state) => state.bookings.items.length),
         { wrapper },
       );
 
@@ -86,7 +85,7 @@ describe('Custom Redux Hooks', () => {
         wrapper,
       });
       const { result: selectorResult } = renderHook(
-        () => useAppSelector((state) => state.bookings.ids.length),
+        () => useAppSelector((state) => state.bookings.items.length),
         { wrapper },
       );
 

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { ThemeProvider } from 'styled-components';
@@ -7,15 +7,6 @@ import { configureStore } from '@reduxjs/toolkit';
 import bookingsReducer from '../../features/bookings/bookingsSlice';
 import { theme } from '../../styles/theme';
 import { BookingsPage } from './BookingsPage';
-
-// Mock the child components
-vi.mock('../components/BookingForm/BookingForm', () => ({
-  default: () => <div data-testid="booking-form">BookingForm Component</div>,
-}));
-
-vi.mock('../components/BookingList/BookingList', () => ({
-  default: () => <div data-testid="booking-list">BookingList Component</div>,
-}));
 
 describe('BookingsPage', () => {
   const store = configureStore({
@@ -35,34 +26,22 @@ describe('BookingsPage', () => {
   };
 
   describe('Rendering', () => {
-    it('should render the page with correct heading', () => {
+    it('should render the page with correct heading and child content', () => {
       renderBookingsPage();
       expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
       expect(
-        screen.getByRole('heading', { name: 'Booking Manager' }),
+        screen.getByRole('heading', { name: 'Property Bookings' }),
       ).toBeInTheDocument();
-    });
 
-    it('should render the booking form component', () => {
-      renderBookingsPage();
-      expect(screen.getByTestId('booking-form')).toBeInTheDocument();
-      expect(screen.getByText('BookingForm Component')).toBeInTheDocument();
-    });
+      // BookingForm presence: check inputs and submit button
+      expect(screen.getByPlaceholderText('Property Name')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Guest Name')).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: /Create Booking/ }),
+      ).toBeInTheDocument();
 
-    it('should render the booking list component', () => {
-      renderBookingsPage();
-      expect(screen.getByTestId('booking-list')).toBeInTheDocument();
-      expect(screen.getByText('BookingList Component')).toBeInTheDocument();
-    });
-
-    it('should render both components in correct order', () => {
-      renderBookingsPage();
-      const elements = screen.getAllByText(
-        /BookingForm Component|BookingList Component/,
-      );
-      expect(elements.length).toBe(2);
-      expect(elements[0].textContent).toBe('BookingForm Component');
-      expect(elements[1].textContent).toBe('BookingList Component');
+      // BookingList presence: empty state message
+      expect(screen.getByText(/No bookings yet/)).toBeInTheDocument();
     });
   });
 
@@ -75,32 +54,30 @@ describe('BookingsPage', () => {
 
     it('should display all main content sections', () => {
       renderBookingsPage();
+      // The app heading is "Property Bookings" and the form/list are
+      // represented by inputs and an empty state message respectively.
       const heading = screen.getByRole('heading', {
-        name: 'Booking Manager',
+        name: 'Property Bookings',
       });
-      const form = screen.getByTestId('booking-form');
-      const list = screen.getByTestId('booking-list');
 
       expect(heading).toBeInTheDocument();
-      expect(form).toBeInTheDocument();
-      expect(list).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Property Name')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Guest Name')).toBeInTheDocument();
+      expect(screen.getByText(/No bookings yet/)).toBeInTheDocument();
     });
 
     it('should render page in proper hierarchy', () => {
       const { container } = renderBookingsPage();
-      screen.getByRole('heading', {
-        name: 'Booking Manager',
+      // heading, inputs, and list message should all be within the page
+      const heading = screen.getByRole('heading', {
+        name: 'Property Bookings',
       });
-      screen.getByTestId('booking-form');
-      screen.getByTestId('booking-list');
+      const propertyInput = screen.getByPlaceholderText('Property Name');
+      const listMessage = screen.getByText(/No bookings yet/);
 
-      // Verify all are children of the container
-      expect(
-        container.querySelector('[data-testid="booking-form"]'),
-      ).toBeInTheDocument();
-      expect(
-        container.querySelector('[data-testid="booking-list"]'),
-      ).toBeInTheDocument();
+      expect(container).toContainElement(heading);
+      expect(container).toContainElement(propertyInput);
+      expect(container).toContainElement(listMessage);
     });
   });
 
@@ -108,39 +85,30 @@ describe('BookingsPage', () => {
     it('should provide Redux Provider to child components', () => {
       renderBookingsPage();
       // If Redux Provider wasn't working, child components wouldn't render
-      expect(screen.getByTestId('booking-form')).toBeInTheDocument();
-      expect(screen.getByTestId('booking-list')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Property Name')).toBeInTheDocument();
+      expect(screen.getByText(/No bookings yet/)).toBeInTheDocument();
     });
 
     it('should render a complete booking page application', () => {
       renderBookingsPage();
       expect(
-        screen.getByRole('heading', { name: 'Booking Manager' }),
+        screen.getByRole('heading', { name: 'Property Bookings' }),
       ).toBeInTheDocument();
-      expect(screen.getByTestId('booking-form')).toBeInTheDocument();
-      expect(screen.getByTestId('booking-list')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Property Name')).toBeInTheDocument();
+      expect(screen.getByText(/No bookings yet/)).toBeInTheDocument();
     });
 
     it('should have heading before form and list', () => {
       const { container } = renderBookingsPage();
       const heading = screen.getByRole('heading', {
-        name: 'Booking Manager',
+        name: 'Property Bookings',
       });
-      const form = screen.getByTestId('booking-form');
-      const list = screen.getByTestId('booking-list');
+      const form = screen.getByPlaceholderText('Property Name');
+      const listMessage = screen.getByText(/No bookings yet/);
 
-      const headingIndex = Array.from(
-        container.querySelectorAll('h1, [data-testid]'),
-      ).indexOf(heading);
-      const formIndex = Array.from(
-        container.querySelectorAll('h1, [data-testid]'),
-      ).indexOf(form);
-      const listIndex = Array.from(
-        container.querySelectorAll('h1, [data-testid]'),
-      ).indexOf(list);
-
-      expect(headingIndex).toBeLessThan(formIndex);
-      expect(formIndex).toBeLessThan(listIndex);
+      const order = Array.from(container.querySelectorAll('h1, input, div'));
+      expect(order.indexOf(heading)).toBeLessThan(order.indexOf(form));
+      expect(order.indexOf(form)).toBeLessThan(order.indexOf(listMessage));
     });
   });
 
@@ -159,14 +127,14 @@ describe('BookingsPage', () => {
     it('should render all child elements without errors', () => {
       renderBookingsPage();
       screen.getByRole('heading');
-      screen.getByTestId('booking-form');
-      screen.getByTestId('booking-list');
+      screen.getByPlaceholderText('Property Name');
+      screen.getByText(/No bookings yet/);
 
       expect(
-        screen.getByRole('heading', { name: 'Booking Manager' }),
+        screen.getByRole('heading', { name: 'Property Bookings' }),
       ).toBeInTheDocument();
-      expect(screen.getByTestId('booking-form')).toBeInTheDocument();
-      expect(screen.getByTestId('booking-list')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Property Name')).toBeInTheDocument();
+      expect(screen.getByText(/No bookings yet/)).toBeInTheDocument();
     });
   });
 });

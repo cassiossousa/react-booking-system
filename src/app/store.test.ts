@@ -8,9 +8,8 @@ describe('Redux Store', () => {
 
     expect(state).toBeDefined();
     expect(state.bookings).toBeDefined();
-    expect(state.bookings.entities).toEqual({});
-    expect(state.bookings.ids).toEqual([]);
-    expect(state.bookings.selectedBookingId).toBeNull();
+    expect(state.bookings.items).toEqual([]);
+    expect(state.bookings.editing).toBeNull();
     expect(state.bookings.error).toBeNull();
   });
 
@@ -18,8 +17,7 @@ describe('Redux Store', () => {
     const state: RootState = store.getState();
 
     expect(state.bookings).toBeDefined();
-    expect(typeof state.bookings.entities).toBe('object');
-    expect(Array.isArray(state.bookings.ids)).toBe(true);
+    expect(Array.isArray(state.bookings.items)).toBe(true);
   });
 
   it('should have correct dispatch type', () => {
@@ -40,9 +38,8 @@ describe('Redux Store', () => {
     const state = store.getState();
 
     expect(state.bookings).toBeDefined();
-    expect(state.bookings.entities).toBeDefined();
-    expect(state.bookings.ids).toBeDefined();
-    expect(state.bookings.selectedBookingId).toBeDefined();
+    expect(state.bookings.items).toBeDefined();
+    expect(state.bookings.editing).toBeDefined();
     expect(state.bookings.error).toBeDefined();
   });
 });
