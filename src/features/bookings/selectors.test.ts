@@ -13,6 +13,7 @@ describe('bookings selectors', () => {
     {
       id: '1',
       propertyId: 'prop1',
+      propertyName: 'Property 1',
       guestName: 'Guest 1',
       startDate: '2025-01-01',
       endDate: '2025-01-10',
@@ -20,6 +21,7 @@ describe('bookings selectors', () => {
     {
       id: '2',
       propertyId: 'prop1',
+      propertyName: 'Property 1',
       guestName: 'Guest 2',
       startDate: '2025-01-15',
       endDate: '2025-01-20',
@@ -27,6 +29,7 @@ describe('bookings selectors', () => {
     {
       id: '3',
       propertyId: 'prop2',
+      propertyName: 'Property 2',
       guestName: 'Guest 3',
       startDate: '2025-02-01',
       endDate: '2025-02-10',

@@ -6,7 +6,7 @@ import bookingsReducer, {
   selectBooking,
   clearError,
 } from './bookingsSlice';
-import type { BookingsState, Booking } from './bookings.types';
+import type { Booking, BookingsState } from './bookings.types';
 
 describe('bookingsSlice', () => {
   const initialState: BookingsState = {
@@ -19,6 +19,7 @@ describe('bookingsSlice', () => {
   const mockBooking: Booking = {
     id: '1',
     propertyId: 'prop1',
+    propertyName: 'Property 1',
     guestName: 'John Doe',
     startDate: '2025-01-01',
     endDate: '2025-01-10',
@@ -26,7 +27,8 @@ describe('bookingsSlice', () => {
 
   const mockBooking2: Booking = {
     id: '2',
-    propertyId: 'prop1',
+    propertyId: 'prop2',
+    propertyName: 'Property 2',
     guestName: 'Jane Doe',
     startDate: '2025-01-15',
     endDate: '2025-01-20',
@@ -44,7 +46,8 @@ describe('bookingsSlice', () => {
     it('should set error for invalid date range', () => {
       const invalidBooking: Booking = {
         id: '3',
-        propertyId: 'prop1',
+        propertyId: 'prop3',
+        propertyName: 'Property 3',
         guestName: 'Invalid',
         startDate: '2025-01-10',
         endDate: '2025-01-01',
@@ -61,7 +64,8 @@ describe('bookingsSlice', () => {
 
       const overlappingBooking: Booking = {
         id: '2',
-        propertyId: 'prop1',
+        propertyId: 'prop2',
+        propertyName: 'Property 2',
         guestName: 'Overlapping',
         startDate: '2025-01-05',
         endDate: '2025-01-15',
@@ -78,7 +82,8 @@ describe('bookingsSlice', () => {
 
       const bookingDifferentProperty: Booking = {
         id: '3',
-        propertyId: 'prop2',
+        propertyId: 'prop3',
+        propertyName: 'Property 3',
         guestName: 'Different Property',
         startDate: '2025-01-05',
         endDate: '2025-01-15',
@@ -104,7 +109,8 @@ describe('bookingsSlice', () => {
 
       const nonOverlappingBooking: Booking = {
         id: '3',
-        propertyId: 'prop1',
+        propertyId: 'prop3',
+        propertyName: 'Property 3',
         guestName: 'Non-overlapping',
         startDate: '2025-01-11',
         endDate: '2025-01-15',
@@ -124,6 +130,7 @@ describe('bookingsSlice', () => {
       const updatedBooking: Booking = {
         id: '1',
         propertyId: 'prop1',
+        propertyName: 'Property 1',
         guestName: 'John Doe Updated',
         startDate: '2025-01-01',
         endDate: '2025-01-10',
@@ -140,7 +147,8 @@ describe('bookingsSlice', () => {
 
       const newBooking: Booking = {
         id: '999',
-        propertyId: 'prop1',
+        propertyId: 'prop3',
+        propertyName: 'Property 3',
         guestName: 'Non-existent',
         startDate: '2025-02-01',
         endDate: '2025-02-10',
@@ -158,6 +166,7 @@ describe('bookingsSlice', () => {
       const invalidBooking: Booking = {
         id: '1',
         propertyId: 'prop1',
+        propertyName: 'Property 1',
         guestName: 'Invalid',
         startDate: '2025-01-10',
         endDate: '2025-01-01',
@@ -175,7 +184,8 @@ describe('bookingsSlice', () => {
 
       const conflictingUpdate: Booking = {
         id: '2',
-        propertyId: 'prop1',
+        propertyId: 'prop2',
+        propertyName: 'Property 2',
         guestName: 'Jane Doe Updated',
         startDate: '2025-01-05',
         endDate: '2025-01-12',
@@ -193,6 +203,7 @@ describe('bookingsSlice', () => {
       const sameBookingUpdated: Booking = {
         id: '1',
         propertyId: 'prop1',
+        propertyName: 'Property 1',
         guestName: 'Same Booking Updated',
         startDate: '2025-01-01',
         endDate: '2025-01-10',
@@ -284,6 +295,7 @@ describe('bookingsSlice', () => {
       const invalidBooking: Booking = {
         id: '1',
         propertyId: 'prop1',
+        propertyName: 'Property 1',
         guestName: 'Invalid',
         startDate: '2025-01-10',
         endDate: '2025-01-01',

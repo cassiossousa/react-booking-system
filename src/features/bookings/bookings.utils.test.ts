@@ -127,6 +127,7 @@ describe('hasOverlappingBooking', () => {
   const booking1: Booking = {
     id: '1',
     propertyId: 'prop1',
+    propertyName: 'Property 1',
     guestName: 'Guest 1',
     startDate: '2025-01-01',
     endDate: '2025-01-10',
@@ -134,7 +135,8 @@ describe('hasOverlappingBooking', () => {
 
   const booking2: Booking = {
     id: '2',
-    propertyId: 'prop1',
+    propertyId: 'prop2',
+    propertyName: 'Property 2',
     guestName: 'Guest 2',
     startDate: '2025-01-05',
     endDate: '2025-01-15',
@@ -142,7 +144,8 @@ describe('hasOverlappingBooking', () => {
 
   const booking3: Booking = {
     id: '3',
-    propertyId: 'prop2',
+    propertyId: 'prop3',
+    propertyName: 'Property 3',
     guestName: 'Guest 3',
     startDate: '2025-01-01',
     endDate: '2025-01-10',
@@ -152,6 +155,7 @@ describe('hasOverlappingBooking', () => {
     const newBooking: Booking = {
       id: '4',
       propertyId: 'prop1',
+      propertyName: 'Property 1',
       guestName: 'Guest 4',
       startDate: '2025-01-07',
       endDate: '2025-01-12',
@@ -165,6 +169,7 @@ describe('hasOverlappingBooking', () => {
     const newBooking: Booking = {
       id: '4',
       propertyId: 'prop1',
+      propertyName: 'Property 1',
       guestName: 'Guest 4',
       startDate: '2025-01-15',
       endDate: '2025-01-20',
@@ -178,6 +183,7 @@ describe('hasOverlappingBooking', () => {
     const newBooking: Booking = {
       id: '4',
       propertyId: 'prop2',
+      propertyName: 'Property 2',
       guestName: 'Guest 4',
       startDate: '2025-01-05',
       endDate: '2025-01-12',
@@ -191,6 +197,7 @@ describe('hasOverlappingBooking', () => {
     const newBooking: Booking = {
       id: '4',
       propertyId: 'prop1',
+      propertyName: 'Property 1',
       guestName: 'Guest 4',
       startDate: '2025-01-01',
       endDate: '2025-01-10',
@@ -204,6 +211,7 @@ describe('hasOverlappingBooking', () => {
     const updatedBooking: Booking = {
       id: '1',
       propertyId: 'prop1',
+      propertyName: 'Property 1',
       guestName: 'Guest 1 Updated',
       startDate: '2025-01-01',
       endDate: '2025-01-10',
@@ -221,6 +229,7 @@ describe('hasOverlappingBooking', () => {
     const updatedBooking: Booking = {
       id: '1',
       propertyId: 'prop1',
+      propertyName: 'Property 1',
       guestName: 'Guest 1 Updated',
       startDate: '2025-01-01',
       endDate: '2025-01-10',
@@ -234,6 +243,7 @@ describe('hasOverlappingBooking', () => {
     const newBooking: Booking = {
       id: '4',
       propertyId: 'prop1',
+      propertyName: 'Property 1',
       guestName: 'Guest 4',
       startDate: '2025-01-12',
       endDate: '2025-01-20',
@@ -250,6 +260,7 @@ describe('hasOverlappingBooking', () => {
     const newBooking: Booking = {
       id: '4',
       propertyId: 'prop1',
+      propertyName: 'Property 1',
       guestName: 'Guest 4',
       startDate: '2025-01-08',
       endDate: '2025-01-12',

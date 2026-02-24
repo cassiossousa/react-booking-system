@@ -5,13 +5,13 @@ import '@testing-library/jest-dom';
 import { ThemeProvider } from 'styled-components';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import BookingForm from './BookingForm';
 import bookingsReducer from '../../features/bookings/bookingsSlice';
 import {
   addBooking,
   selectBooking,
 } from '../../features/bookings/bookingsSlice';
 import { theme } from '../../styles/theme';
+import { BookingForm } from './BookingForm';
 
 describe('BookingForm', () => {
   let store: ReturnType<
@@ -205,6 +205,7 @@ describe('BookingForm', () => {
       const testBooking = {
         id: '1',
         propertyId: 'property-1',
+        propertyName: 'Property 1',
         guestName: 'Jane Smith',
         startDate: '2026-03-01T00:00:00.000Z',
         endDate: '2026-03-10T00:00:00.000Z',
@@ -234,6 +235,7 @@ describe('BookingForm', () => {
       const testBooking = {
         id: '1',
         propertyId: 'property-1',
+        propertyName: 'Property 1',
         guestName: 'Jane Smith',
         startDate: '2026-03-01T00:00:00.000Z',
         endDate: '2026-03-10T00:00:00.000Z',
@@ -257,6 +259,7 @@ describe('BookingForm', () => {
       const testBooking = {
         id: '1',
         propertyId: 'property-1',
+        propertyName: 'Property 1',
         guestName: 'Jane Smith',
         startDate: '2026-03-01T00:00:00.000Z',
         endDate: '2026-03-10T00:00:00.000Z',
