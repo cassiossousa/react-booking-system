@@ -23,8 +23,13 @@
   "devDependencies": {
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.2",
+    "@types/react-dom": "19.2.3",
+    "@types/styled-components": "5.1.36",
     "@vitejs/plugin-react": "5.1.4",
     "cypress": "15.10.0",
+    "eslint": "10.0.2",
+    "eslint-config-prettier": "10.1.8",
+    "prettier": "3.8.1",
     "vitest": "4.0.18"
   }
 }
