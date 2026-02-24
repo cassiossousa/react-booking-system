@@ -4,9 +4,9 @@ import '@testing-library/jest-dom';
 import { ThemeProvider } from 'styled-components';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import BookingPage from './BookingPage';
-import bookingsReducer from '../features/bookings/bookingsSlice';
-import { theme } from '../styles/theme';
+import bookingsReducer from '../../features/bookings/bookingsSlice';
+import { theme } from '../../styles/theme';
+import { BookingsPage } from './BookingsPage';
 
 // Mock the child components
 vi.mock('../components/BookingForm/BookingForm', () => ({
@@ -17,18 +17,18 @@ vi.mock('../components/BookingList/BookingList', () => ({
   default: () => <div data-testid="booking-list">BookingList Component</div>,
 }));
 
-describe('BookingPage', () => {
+describe('BookingsPage', () => {
   const store = configureStore({
     reducer: {
       bookings: bookingsReducer,
     },
   });
 
-  const renderBookingPage = () => {
+  const renderBookingsPage = () => {
     return render(
       <Provider store={store}>
         <ThemeProvider theme={theme}>
-          <BookingPage />
+          <BookingsPage />
         </ThemeProvider>
       </Provider>,
     );
@@ -36,7 +36,7 @@ describe('BookingPage', () => {
 
   describe('Rendering', () => {
     it('should render the page with correct heading', () => {
-      renderBookingPage();
+      renderBookingsPage();
       expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
       expect(
         screen.getByRole('heading', { name: 'Booking Manager' }),
@@ -44,19 +44,19 @@ describe('BookingPage', () => {
     });
 
     it('should render the booking form component', () => {
-      renderBookingPage();
+      renderBookingsPage();
       expect(screen.getByTestId('booking-form')).toBeInTheDocument();
       expect(screen.getByText('BookingForm Component')).toBeInTheDocument();
     });
 
     it('should render the booking list component', () => {
-      renderBookingPage();
+      renderBookingsPage();
       expect(screen.getByTestId('booking-list')).toBeInTheDocument();
       expect(screen.getByText('BookingList Component')).toBeInTheDocument();
     });
 
     it('should render both components in correct order', () => {
-      renderBookingPage();
+      renderBookingsPage();
       const elements = screen.getAllByText(
         /BookingForm Component|BookingList Component/,
       );
@@ -68,13 +68,13 @@ describe('BookingPage', () => {
 
   describe('Layout Structure', () => {
     it('should have a container with flex layout', () => {
-      const { container } = renderBookingPage();
+      const { container } = renderBookingsPage();
       const containerElement = container.firstChild;
       expect(containerElement).toBeInTheDocument();
     });
 
     it('should display all main content sections', () => {
-      renderBookingPage();
+      renderBookingsPage();
       const heading = screen.getByRole('heading', {
         name: 'Booking Manager',
       });
@@ -87,7 +87,7 @@ describe('BookingPage', () => {
     });
 
     it('should render page in proper hierarchy', () => {
-      const { container } = renderBookingPage();
+      const { container } = renderBookingsPage();
       screen.getByRole('heading', {
         name: 'Booking Manager',
       });
@@ -106,14 +106,14 @@ describe('BookingPage', () => {
 
   describe('Component Integration', () => {
     it('should provide Redux Provider to child components', () => {
-      renderBookingPage();
+      renderBookingsPage();
       // If Redux Provider wasn't working, child components wouldn't render
       expect(screen.getByTestId('booking-form')).toBeInTheDocument();
       expect(screen.getByTestId('booking-list')).toBeInTheDocument();
     });
 
     it('should render a complete booking page application', () => {
-      renderBookingPage();
+      renderBookingsPage();
       expect(
         screen.getByRole('heading', { name: 'Booking Manager' }),
       ).toBeInTheDocument();
@@ -122,7 +122,7 @@ describe('BookingPage', () => {
     });
 
     it('should have heading before form and list', () => {
-      const { container } = renderBookingPage();
+      const { container } = renderBookingsPage();
       const heading = screen.getByRole('heading', {
         name: 'Booking Manager',
       });
@@ -146,18 +146,18 @@ describe('BookingPage', () => {
 
   describe('Page Structure', () => {
     it('should be a function component', () => {
-      const { container } = renderBookingPage();
+      const { container } = renderBookingsPage();
       expect(container.childNodes.length).toBeGreaterThan(0);
     });
 
     it('should render without errors', () => {
       expect(() => {
-        renderBookingPage();
+        renderBookingsPage();
       }).not.toThrow();
     });
 
     it('should render all child elements without errors', () => {
-      renderBookingPage();
+      renderBookingsPage();
       screen.getByRole('heading');
       screen.getByTestId('booking-form');
       screen.getByTestId('booking-list');

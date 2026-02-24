@@ -1,65 +1,40 @@
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import {
-  deleteBooking,
-  selectBooking,
-  clearError,
-} from '../../features/bookings/bookingsSlice';
-import {
-  selectAllBookings,
-  selectError,
-} from '../../features/bookings/selectors';
-
+import { useAppSelector } from '../../app/hooks';
+import { selectAllBookings } from '../../features/bookings/selectors';
+import { BookingCard } from '../BookingCard/BookingCard';
+import EmptyState from '../EmptyState/EmptyState';
 import {
   ListWrapper,
-  Card,
-  ButtonGroup,
-  Button,
-  ErrorBanner,
+  PropertySection,
+  PropertyTitle,
 } from './BookingList.styles';
 
 export default function BookingList() {
-  const dispatch = useAppDispatch();
   const bookings = useAppSelector(selectAllBookings);
-  const error = useAppSelector(selectError);
+
+  if (!bookings.length) {
+    return <EmptyState />;
+  }
+
+  const grouped = bookings.reduce(
+    (acc, booking) => {
+      if (!acc[booking.propertyId]) {
+        acc[booking.propertyId] = [];
+      }
+      acc[booking.propertyId].push(booking);
+      return acc;
+    },
+    {} as Record<string, typeof bookings>,
+  );
 
   return (
     <ListWrapper>
-      {error && (
-        <ErrorBanner>
-          {error}
-          <Button
-            style={{ marginLeft: '1rem' }}
-            onClick={() => dispatch(clearError())}
-          >
-            Dismiss
-          </Button>
-        </ErrorBanner>
-      )}
-
-      {bookings.length === 0 && <p>No bookings yet.</p>}
-
-      {bookings.map((booking) => (
-        <Card key={booking.id}>
-          <div>
-            <strong>{booking.guestName}</strong>
-            <div>Property: {booking.propertyId}</div>
-            <div>
-              {booking.startDate.slice(0, 10)} → {booking.endDate.slice(0, 10)}
-            </div>
-          </div>
-
-          <ButtonGroup>
-            <Button onClick={() => dispatch(selectBooking(booking.id))}>
-              Edit
-            </Button>
-            <Button
-              variant="danger"
-              onClick={() => dispatch(deleteBooking(booking.id))}
-            >
-              Delete
-            </Button>
-          </ButtonGroup>
-        </Card>
+      {Object.entries(grouped).map(([propertyId, bookings]) => (
+        <PropertySection key={propertyId}>
+          <PropertyTitle>{propertyId}</PropertyTitle>
+          {bookings.map((booking) => (
+            <BookingCard key={booking.id} booking={booking} />
+          ))}
+        </PropertySection>
       ))}
     </ListWrapper>
   );

@@ -1,6 +1,7 @@
 export interface Booking {
   id: string;
   propertyId: string;
+  propertyName: string;
   guestName: string;
   startDate: string;
   endDate: string;

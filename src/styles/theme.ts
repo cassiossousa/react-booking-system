@@ -1,21 +1,29 @@
 export const theme = {
+  fonts: {
+    body: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+  },
+
   colors: {
-    background: '#f5f7fb',
+    primary: '#2563eb',
+    primaryHover: '#1d4ed8',
+    danger: '#dc2626',
+    background: '#f8fafc',
     surface: '#ffffff',
-    primary: '#3b82f6',
-    primaryHover: '#2563eb',
-    danger: '#ef4444',
-    textPrimary: '#111827',
-    textSecondary: '#6b7280',
-    border: '#e5e7eb',
-    errorBackground: '#fef2f2',
-    errorText: '#991b1b',
+    border: '#e2e8f0',
+    textPrimary: '#0f172a',
+    textSecondary: '#64748b',
   },
+
   radius: {
-    md: '12px',
-    lg: '16px',
+    sm: '8px',
+    md: '14px',
+    lg: '20px',
   },
+
   shadow: {
-    card: '0 8px 24px rgba(0,0,0,0.05)',
+    sm: '0 1px 2px rgba(0,0,0,0.05)',
+    md: '0 4px 16px rgba(0,0,0,0.08)',
   },
+
+  spacing: (n: number) => `${n * 8}px`,
 };
