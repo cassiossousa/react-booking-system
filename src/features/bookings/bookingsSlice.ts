@@ -7,6 +7,7 @@ const initialState: BookingsState = {
   ids: [],
   selectedBookingId: null,
   error: null,
+  editing: null,
 };
 
 const bookingsSlice = createSlice({
@@ -62,6 +63,10 @@ const bookingsSlice = createSlice({
       state.selectedBookingId = action.payload;
     },
 
+    setEditingBooking: (state, action) => {
+      state.editing = action.payload;
+    },
+
     clearError: (state) => {
       state.error = null;
     },
@@ -70,10 +75,11 @@ const bookingsSlice = createSlice({
 
 export const {
   addBooking,
-  updateBooking,
+  clearError,
   deleteBooking,
   selectBooking,
-  clearError,
+  setEditingBooking,
+  updateBooking,
 } = bookingsSlice.actions;
 
 export default bookingsSlice.reducer;

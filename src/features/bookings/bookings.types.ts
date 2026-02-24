@@ -12,4 +12,5 @@ export interface BookingsState {
   ids: string[];
   selectedBookingId: string | null;
   error: string | null;
+  editing: Booking | null;
 }

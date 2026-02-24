@@ -1,5 +1,5 @@
 import { BookingForm } from '../../components/BookingForm/BookingForm';
-import BookingList from '../../components/BookingList/BookingList';
+import { BookingList } from '../../components/BookingList/BookingList';
 import {
   PageContainer,
   Title,

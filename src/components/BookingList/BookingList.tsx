@@ -1,41 +1,47 @@
-import { useAppSelector } from '../../app/hooks';
+import { useCallback } from 'react';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectAllBookings } from '../../features/bookings/selectors';
-import { BookingCard } from '../BookingCard/BookingCard';
-import EmptyState from '../EmptyState/EmptyState';
 import {
-  ListWrapper,
-  PropertySection,
-  PropertyTitle,
-} from './BookingList.styles';
+  deleteBooking,
+  setEditingBooking,
+} from '../../features/bookings/bookingsSlice';
+import { BookingCard } from '../BookingCard/BookingCard';
+import EmptyState, { Wrapper } from '../EmptyState/EmptyState';
+import type { Booking } from '../../features/bookings/bookings.types';
 
-export default function BookingList() {
+export const BookingList = () => {
+  const dispatch = useAppDispatch();
   const bookings = useAppSelector(selectAllBookings);
 
-  if (!bookings.length) {
-    return <EmptyState />;
+  // Stable callbacks (important for performance)
+  const handleDelete = useCallback(
+    (id: string) => {
+      dispatch(deleteBooking(id));
+    },
+    [dispatch],
+  );
+
+  const handleEdit = useCallback(
+    (booking: Booking) => {
+      dispatch(setEditingBooking(booking));
+    },
+    [dispatch],
+  );
+
+  if (bookings.length === 0) {
+    return <EmptyState>No bookings yet. Create your first one.</EmptyState>;
   }
 
-  const grouped = bookings.reduce(
-    (acc, booking) => {
-      if (!acc[booking.propertyId]) {
-        acc[booking.propertyId] = [];
-      }
-      acc[booking.propertyId].push(booking);
-      return acc;
-    },
-    {} as Record<string, typeof bookings>,
-  );
-
   return (
-    <ListWrapper>
-      {Object.entries(grouped).map(([propertyId, bookings]) => (
-        <PropertySection key={propertyId}>
-          <PropertyTitle>{propertyId}</PropertyTitle>
-          {bookings.map((booking) => (
-            <BookingCard key={booking.id} booking={booking} />
-          ))}
-        </PropertySection>
+    <Wrapper>
+      {bookings.map((booking) => (
+        <BookingCard
+          key={booking.id}
+          booking={booking}
+          onDelete={handleDelete}
+          onEdit={handleEdit}
+        />
       ))}
-    </ListWrapper>
+    </Wrapper>
   );
-}
+};
