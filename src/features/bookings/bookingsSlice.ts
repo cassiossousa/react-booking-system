@@ -1,37 +1,48 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import { createBooking } from './domain/booking.service';
-import type { Booking } from './types';
+import {
+  createSlice,
+  createEntityAdapter,
+  type PayloadAction,
+} from '@reduxjs/toolkit';
+import type { RootState } from '../../app/store';
 
-interface BookingState {
-  items: Booking[];
+export interface Booking {
+  id: string;
+  propertyId: string;
+  guestName: string;
+  checkIn: string;
+  checkOut: string;
 }
 
-const initialState: BookingState = {
-  items: [],
-};
+const bookingsAdapter = createEntityAdapter<Booking>();
+
+const initialState = bookingsAdapter.getInitialState({
+  selectedBookingId: null as string | null,
+  loading: false,
+  error: null as string | null,
+});
 
 const bookingsSlice = createSlice({
   name: 'bookings',
   initialState,
   reducers: {
-    addBooking: (
-      state,
-      action: PayloadAction<Omit<Booking, 'id' | 'createdAt'>>,
-    ) => {
-      const booking = createBooking(action.payload, state.items);
-      state.items.push(booking);
-    },
+    bookingAdded: bookingsAdapter.addOne,
+    bookingUpdated: bookingsAdapter.upsertOne,
+    bookingRemoved: bookingsAdapter.removeOne,
 
-    cancelBooking: (state, action: PayloadAction<string>) => {
-      const booking = state.items.find((b) => b.id === action.payload);
-
-      if (booking) {
-        booking.status = 'cancelled';
-      }
+    bookingSelected(state, action: PayloadAction<string | null>) {
+      state.selectedBookingId = action.payload;
     },
   },
 });
 
-export const { addBooking, cancelBooking } = bookingsSlice.actions;
+export const { bookingAdded, bookingUpdated, bookingRemoved, bookingSelected } =
+  bookingsSlice.actions;
 
 export default bookingsSlice.reducer;
+
+/**
+ * Adapter selectors (fully consistent)
+ */
+export const bookingsSelectors = bookingsAdapter.getSelectors<RootState>(
+  (state) => state.bookings,
+);

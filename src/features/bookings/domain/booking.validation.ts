@@ -4,12 +4,12 @@ import {
 } from './booking.constants';
 import { differenceInDays, isOverlapping } from './date.utils';
 import { BookingValidationError, BookingConflictError } from './booking.errors';
-import type { Booking } from './booking.types';
+import type { Booking } from '../types';
 
 export const validateBookingInput = (
   input: Omit<Booking, 'id' | 'createdAt'>,
 ) => {
-  if (!input.customerName.trim()) {
+  if (!input.guestName.trim()) {
     throw new BookingValidationError('Customer name is required');
   }
 

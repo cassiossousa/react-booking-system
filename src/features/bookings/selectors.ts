@@ -1,51 +1,43 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { isPast } from 'date-fns';
 import type { RootState } from '../../app/store';
-import { isOverlapping } from './domain/date.utils';
+import { bookingsSelectors } from './bookingsSlice';
+import { propertiesSelectors } from '../properties/propertiesSlice';
 
 /**
- * Base selector
+ * Basic adapter selectors (direct re-exports)
  */
-export const selectBookingState = (state: RootState) => state.bookings;
+export const selectAllBookings = bookingsSelectors.selectAll;
+export const selectBookingById = bookingsSelectors.selectById;
+export const selectBookingIds = bookingsSelectors.selectIds;
 
 /**
- * All bookings
+ * Extra simple selectors
  */
-export const selectAllBookings = createSelector(
-  selectBookingState,
-  (bookingState) => bookingState.items,
+export const selectSelectedBookingId = (state: RootState) =>
+  state.bookings.selectedBookingId;
+
+export const selectSelectedBooking = createSelector(
+  selectSelectedBookingId,
+  bookingsSelectors.selectEntities,
+  (selectedId, entities) =>
+    selectedId ? (entities[selectedId] ?? null) : null,
 );
 
 /**
- * Booking by ID
+ * Cross-feature selector (CORRECT & consistent)
  */
-export const selectBookingById = (id: string) =>
-  createSelector(selectAllBookings, (bookings) =>
-    bookings.find((b) => b.id === id),
-  );
+export const selectBookingWithProperty = (bookingId: string) =>
+  createSelector(
+    (state: RootState) => bookingsSelectors.selectById(state, bookingId),
+    propertiesSelectors.selectEntities,
+    (booking, properties) => {
+      if (!booking) return null;
 
-/**
- * Active bookings (not past)
- */
-export const selectActiveBookings = createSelector(
-  selectAllBookings,
-  (bookings) => bookings.filter((b) => !isPast(b.endDate)),
-);
+      const property = properties[booking.propertyId];
 
-/**
- * Past bookings
- */
-export const selectPastBookings = createSelector(
-  selectAllBookings,
-  (bookings) => bookings.filter((b) => isPast(b.endDate)),
-);
-
-/**
- * Overlapping bookings within a given range
- */
-export const selectOverlappingBookings = (startDate: string, endDate: string) =>
-  createSelector(selectAllBookings, (bookings) =>
-    bookings.filter((b) =>
-      isOverlapping(startDate, endDate, b.startDate, b.endDate),
-    ),
+      return {
+        ...booking,
+        propertyName: property?.name ?? 'Unknown',
+      };
+    },
   );
