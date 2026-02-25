@@ -2,42 +2,55 @@ import { createSelector } from '@reduxjs/toolkit';
 import type { RootState } from '../../app/store';
 import { bookingsSelectors } from './bookingsSlice';
 import { propertiesSelectors } from '../properties/propertiesSlice';
+import type { BookingWithProperty } from './types';
 
 /**
- * Basic adapter selectors (direct re-exports)
+ * Basic adapter selectors
  */
 export const selectAllBookings = bookingsSelectors.selectAll;
+
 export const selectBookingById = bookingsSelectors.selectById;
+
 export const selectBookingIds = bookingsSelectors.selectIds;
 
+export const selectBookingEntities = bookingsSelectors.selectEntities;
+
 /**
- * Extra simple selectors
+ * Selected booking (raw entity)
  */
 export const selectSelectedBookingId = (state: RootState) =>
   state.bookings.selectedBookingId;
 
 export const selectSelectedBooking = createSelector(
   selectSelectedBookingId,
-  bookingsSelectors.selectEntities,
+  selectBookingEntities,
   (selectedId, entities) =>
     selectedId ? (entities[selectedId] ?? null) : null,
 );
 
 /**
- * Cross-feature selector (CORRECT & consistent)
+ * Enriched selectors (join with properties)
  */
+export const selectAllBookingsWithProperty = createSelector(
+  selectAllBookings,
+  propertiesSelectors.selectEntities,
+  (bookings, properties): BookingWithProperty[] =>
+    bookings.map((booking) => ({
+      ...booking,
+      propertyName: properties[booking.propertyId]?.name ?? 'Unknown',
+    })),
+);
+
 export const selectBookingWithProperty = (bookingId: string) =>
   createSelector(
     (state: RootState) => bookingsSelectors.selectById(state, bookingId),
     propertiesSelectors.selectEntities,
-    (booking, properties) => {
+    (booking, properties): BookingWithProperty | null => {
       if (!booking) return null;
-
-      const property = properties[booking.propertyId];
 
       return {
         ...booking,
-        propertyName: property?.name ?? 'Unknown',
+        propertyName: properties[booking.propertyId]?.name ?? 'Unknown',
       };
     },
   );

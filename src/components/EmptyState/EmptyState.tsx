@@ -1,17 +1,15 @@
 import styled from 'styled-components';
+import { Card } from '../../ui/Card';
 
-export const Wrapper = styled.div`
-  padding: 2rem;
-  background: ${({ theme }) => theme.colors.surface};
-  border-radius: ${({ theme }) => theme.radius.lg};
+const Wrapper = styled(Card)`
   text-align: center;
   color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
-export default function EmptyState({
-  children,
-}: {
+type Props = {
   children: React.ReactNode;
-}) {
-  return <Wrapper>{children}</Wrapper>;
+};
+
+export default function EmptyState({ children }: Props) {
+  return <Wrapper padding="lg">{children}</Wrapper>;
 }

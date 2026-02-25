@@ -1,21 +1,27 @@
 import { createSelector } from '@reduxjs/toolkit';
 import type { RootState } from '../../app/store';
+import { propertiesSelectors } from './propertiesSlice';
 
-export const selectPropertiesState = (state: RootState) => state.properties;
+/**
+ * Adapter selectors (direct re-exports)
+ */
+export const selectAllProperties = propertiesSelectors.selectAll;
 
-export const selectAllProperties = createSelector(
-  selectPropertiesState,
-  (state) => state.ids.map((id) => state.entities[id]),
-);
+export const selectPropertyById = propertiesSelectors.selectById;
 
-export const selectPropertyById = (propertyId: string) =>
-  createSelector(
-    selectPropertiesState,
-    (state) => state.entities[propertyId] ?? null,
-  );
+export const selectPropertyIds = propertiesSelectors.selectIds;
+
+export const selectPropertyEntities = propertiesSelectors.selectEntities;
+
+/**
+ * Extra selectors
+ */
+export const selectSelectedPropertyId = (state: RootState) =>
+  state.properties.selectedPropertyId;
 
 export const selectSelectedProperty = createSelector(
-  selectPropertiesState,
-  (state) =>
-    state.selectedPropertyId ? state.entities[state.selectedPropertyId] : null,
+  selectSelectedPropertyId,
+  propertiesSelectors.selectEntities,
+  (selectedId, entities) =>
+    selectedId ? (entities[selectedId] ?? null) : null,
 );

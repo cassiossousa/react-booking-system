@@ -1,12 +1,7 @@
 import { BookingForm } from '../../components/BookingForm/BookingForm';
 import { BookingList } from '../../components/BookingList/BookingList';
-import {
-  PageContainer,
-  Title,
-  Row,
-  Column,
-  Card,
-} from '../../styles/primitives';
+import { PageContainer, Title, Row, Column } from '../../styles/primitives';
+import { Card } from '../../ui/Card';
 
 export const BookingsPage = () => {
   return (
