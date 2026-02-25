@@ -8,7 +8,10 @@
     "cypress": "cypress open",
     "dev": "vite",
     "lint": "eslint .",
+    "lint-fix": "eslint --fix .",
     "preview": "vite preview",
+    "prettier": "prettier --check .",
+    "prettier-fix": "prettier --write .",
     "test": "vitest",
     "test-cov": "vitest --coverage",
     "test-watch": "vitest --watch --coverage"
@@ -25,7 +28,6 @@
     "zod": "4.3.6"
   },
   "devDependencies": {
-    "@eslint/js": "10.0.1",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.2",
     "@testing-library/user-event": "14.6.1",
@@ -34,8 +36,10 @@
     "@vitejs/plugin-react": "5.1.4",
     "@vitest/coverage-v8": "4.0.18",
     "cypress": "15.10.0",
-    "eslint": "10.0.2",
+    "eslint": "9.39.3",
     "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-react-hooks": "7.0.1",
+    "eslint-plugin-react-refresh": "0.5.2",
     "globals": "17.3.0",
     "jsdom": "28.1.0",
     "prettier": "3.8.1",

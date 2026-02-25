@@ -9,6 +9,7 @@ import { BookingList } from './BookingList';
 import bookingsReducer, {
   addBooking,
 } from '../../features/bookings/bookingsSlice';
+import type { Booking } from '../../features/bookings/bookings.types';
 import { theme } from '../../styles/theme';
 
 describe('BookingList', () => {
@@ -33,14 +34,14 @@ describe('BookingList', () => {
   });
 
   it('renders bookings and details', () => {
-    const booking = {
+    const booking: Booking = {
       id: '1',
       propertyId: 'property-1',
       propertyName: 'Property 1',
       guestName: 'John Doe',
       startDate: '2026-03-01',
       endDate: '2026-03-10',
-    } as any;
+    };
 
     store.dispatch(addBooking(booking));
     renderBookingList();
@@ -53,14 +54,14 @@ describe('BookingList', () => {
   it('sets editing when Edit is clicked and deletes when Delete is clicked', async () => {
     const user = userEvent.setup();
 
-    const booking = {
+    const booking: Booking = {
       id: '1',
       propertyId: 'property-1',
       propertyName: 'Property 1',
       guestName: 'John Doe',
       startDate: '2026-03-01',
       endDate: '2026-03-10',
-    } as any;
+    };
 
     store.dispatch(addBooking(booking));
     renderBookingList();

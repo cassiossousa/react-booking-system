@@ -36,35 +36,35 @@ describe('bookings selectors (current)', () => {
     },
   ];
 
-  const mockState: any = {
+  const mockState = {
     bookings: {
       items: mockBookings,
       editing: null,
       error: null,
     },
-  };
+  } as const;
 
   it('selectAllBookings returns items array', () => {
-    const result = selectAllBookings(mockState as any);
+    const result = selectAllBookings(mockState);
     expect(result).toEqual(mockBookings);
   });
 
   it('selectBookingById returns specific booking', () => {
     const selector = selectBookingById('2');
-    const result = selector(mockState as any);
+    const result = selector(mockState);
     expect(result).toEqual(mockBookings[1]);
   });
 
   it('selectOverlappingBookings finds overlaps', () => {
     const selector = selectOverlappingBookings('2025-01-05', '2025-01-12');
-    const result = selector(mockState as any);
+    const result = selector(mockState);
     expect(result.length).toBeGreaterThan(0);
     expect(result[0].id).toBe('1');
   });
 
   it('selectActiveBookings and selectPastBookings are functions', () => {
-    const active = selectActiveBookings(mockState as any);
-    const past = selectPastBookings(mockState as any);
+    const active = selectActiveBookings(mockState);
+    const past = selectPastBookings(mockState);
     expect(Array.isArray(active)).toBe(true);
     expect(Array.isArray(past)).toBe(true);
   });
