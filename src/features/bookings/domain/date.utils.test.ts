@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { isValidDateRange, isOverlapping, hasDateConflict } from './date.utils';
+import { hasDateConflict, isOverlapping, isValidDateRange } from './date.utils';
 
-describe('isValidDateRange', () => {
+describe('isValidDateRange()', () => {
   it('returns true for valid range', () => {
     expect(isValidDateRange('2025-01-01', '2025-01-05')).toBe(true);
   });
@@ -19,7 +19,7 @@ describe('isValidDateRange', () => {
   });
 });
 
-describe('isOverlapping', () => {
+describe('isOverlapping()', () => {
   it('detects partial overlap', () => {
     expect(
       isOverlapping('2025-01-01', '2025-01-05', '2025-01-03', '2025-01-07'),
@@ -45,7 +45,7 @@ describe('isOverlapping', () => {
   });
 });
 
-describe('hasDateConflict', () => {
+describe('hasDateConflict()', () => {
   const bookings = [
     {
       id: '1',

@@ -20,6 +20,17 @@ export const parseISOToUTC = (date: string): Date => {
   return new Date(Date.UTC(year, month - 1, day));
 };
 
+export const isPast = (iso: string): boolean =>
+  parseISOToUTC(iso).getTime() < Date.now();
+
+export const differenceInDays = (startIso: string, endIso: string): number => {
+  const start = parseISOToUTC(startIso).getTime();
+  const end = parseISOToUTC(endIso).getTime();
+
+  const diff = end - start;
+  return Math.ceil(diff / (1000 * 60 * 60 * 24));
+};
+
 export const isValidDateRange = (start: string, end: string): boolean => {
   if (!start || !end) return false;
 

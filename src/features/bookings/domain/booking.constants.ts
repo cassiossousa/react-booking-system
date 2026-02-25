@@ -1,0 +1,2 @@
+export const MIN_BOOKING_DURATION_DAYS = 1;
+export const MAX_BOOKING_DURATION_DAYS = 30;
