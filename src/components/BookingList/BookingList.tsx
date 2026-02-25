@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectAllBookingsWithProperty } from '../../features/bookings/selectors';
+import { selectAllBookingsWithProperty } from '../../features/bookings/bookings.selectors';
 import {
   bookingRemoved,
   bookingSelected,
-} from '../../features/bookings/bookingsSlice';
+} from '../../features/bookings/bookings.slice';
 import { BookingCard } from '../BookingCard/BookingCard';
 import EmptyState from '../EmptyState/EmptyState';
 import type { BookingWithProperty } from '../../features/bookings/types';

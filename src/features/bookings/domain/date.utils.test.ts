@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest';
 import { hasDateConflict, isOverlapping, isValidDateRange } from './date.utils';
 
 describe('isValidDateRange()', () => {

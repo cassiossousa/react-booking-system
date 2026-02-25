@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 import type { RootState } from '../../app/store';
-import { bookingsSelectors } from './bookingsSlice';
-import { propertiesSelectors } from '../properties/propertiesSlice';
+import { bookingsSelectors } from './bookings.slice';
+import { propertiesSelectors } from '../properties/properties.slice';
 import type { BookingWithProperty } from './types';
 
 /**

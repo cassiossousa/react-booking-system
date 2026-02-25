@@ -4,9 +4,9 @@ import {
   bookingAdded,
   bookingUpdated,
   bookingSelected,
-} from '../../features/bookings/bookingsSlice';
-import { selectSelectedBooking } from '../../features/bookings/selectors';
-import { selectAllProperties } from '../../features/properties/selectors';
+} from '../../features/bookings/bookings.slice';
+import { selectSelectedBooking } from '../../features/bookings/bookings.selectors';
+import { selectAllProperties } from '../../features/properties/properties.selectors';
 import { Input } from '../../ui/Input';
 import { Button } from '../../ui/Button';
 import { Form, Row, Error } from './BookingForm.styles';

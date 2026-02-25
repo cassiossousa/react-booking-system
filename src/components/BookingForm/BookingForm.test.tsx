@@ -1,11 +1,10 @@
-import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { ThemeProvider } from 'styled-components';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import bookingsReducer from '../../features/bookings/bookingsSlice';
+import bookingsReducer from '../../features/bookings/bookings.slice';
 import { theme } from '../../styles/theme';
 import { BookingForm } from './BookingForm';
 

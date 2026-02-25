@@ -1,10 +1,9 @@
-import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { ThemeProvider } from 'styled-components';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import bookingsReducer from '../../features/bookings/bookingsSlice';
+import bookingsReducer from '../../features/bookings/bookings.slice';
 import { theme } from '../../styles/theme';
 import { BookingsPage } from './BookingsPage';
 

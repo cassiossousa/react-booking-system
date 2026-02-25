@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 import type { RootState } from '../../app/store';
-import { propertiesSelectors } from './propertiesSlice';
+import { propertiesSelectors } from './properties.slice';
 
 /**
  * Adapter selectors (direct re-exports)
