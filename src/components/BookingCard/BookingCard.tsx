@@ -1,4 +1,4 @@
-import type { Booking } from '../../features/bookings/bookings.types';
+import type { Booking } from '../../features/bookings/types';
 import { Button } from '../../ui/Button';
 import {
   Actions,

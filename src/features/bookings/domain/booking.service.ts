@@ -1,18 +1,18 @@
 import { v4 as uuid } from 'uuid';
-import type { Booking } from './booking.types';
 import { validateBookingInput, ensureNoConflict } from './booking.validation';
+import type { Booking } from '../types';
 
 export const createBooking = (
   input: Omit<Booking, 'id' | 'createdAt'>,
   existing: Booking[],
 ): Booking => {
-  // 1️⃣ Domain validation
+  // Domain validation
   validateBookingInput(input);
 
-  // 2️⃣ Conflict prevention
+  // Conflict prevention
   ensureNoConflict(input, existing);
 
-  // 3️⃣ Construct valid domain entity
+  // Construct valid domain entity
   return {
     ...input,
     id: uuid(),

@@ -6,7 +6,7 @@ import {
   selectPastBookings,
   selectOverlappingBookings,
 } from './selectors';
-import type { Booking } from './bookings.types';
+import type { Booking } from './types';
 
 describe('bookings selectors (current)', () => {
   const mockBookings: Booking[] = [
@@ -17,6 +17,8 @@ describe('bookings selectors (current)', () => {
       guestName: 'Guest 1',
       startDate: '2025-01-01',
       endDate: '2025-01-10',
+      status: 'confirmed',
+      createdAt: new Date().toISOString(),
     },
     {
       id: '2',
@@ -25,6 +27,8 @@ describe('bookings selectors (current)', () => {
       guestName: 'Guest 2',
       startDate: '2025-01-15',
       endDate: '2025-01-20',
+      status: 'confirmed',
+      createdAt: new Date().toISOString(),
     },
     {
       id: '3',
@@ -33,6 +37,8 @@ describe('bookings selectors (current)', () => {
       guestName: 'Guest 3',
       startDate: '2025-02-01',
       endDate: '2025-02-10',
+      status: 'confirmed',
+      createdAt: new Date().toISOString(),
     },
   ];
 

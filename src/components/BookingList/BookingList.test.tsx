@@ -9,7 +9,7 @@ import { BookingList } from './BookingList';
 import bookingsReducer, {
   addBooking,
 } from '../../features/bookings/bookingsSlice';
-import type { Booking } from '../../features/bookings/bookings.types';
+import type { Booking } from '../../features/bookings/types';
 import { theme } from '../../styles/theme';
 
 describe('BookingList', () => {
@@ -41,6 +41,8 @@ describe('BookingList', () => {
       guestName: 'John Doe',
       startDate: '2026-03-01',
       endDate: '2026-03-10',
+      status: 'confirmed',
+      createdAt: new Date().toISOString(),
     };
 
     store.dispatch(addBooking(booking));
@@ -61,6 +63,8 @@ describe('BookingList', () => {
       guestName: 'John Doe',
       startDate: '2026-03-01',
       endDate: '2026-03-10',
+      status: 'confirmed',
+      createdAt: new Date().toISOString(),
     };
 
     store.dispatch(addBooking(booking));

@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { Booking } from './domain/booking.types';
 import { createBooking } from './domain/booking.service';
+import type { Booking } from './types';
 
 interface BookingState {
   items: Booking[];
