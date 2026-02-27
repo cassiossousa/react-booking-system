@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.1",
   "type": "module",
+  "homepage": "https://cassiossousa.github.io/react-booking-system",
   "scripts": {
     "build": "tsc && vite build",
     "cypress": "cypress open",
