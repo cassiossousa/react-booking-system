@@ -7,14 +7,12 @@ export const BookingsPage = () => {
   return (
     <PageContainer>
       <Title>Property Bookings</Title>
-
       <Row>
         <Column>
           <Card>
             <BookingForm />
           </Card>
         </Column>
-
         <Column>
           <BookingList />
         </Column>

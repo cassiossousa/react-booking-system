@@ -28,7 +28,6 @@ const bookingsSlice = createSlice({
     bookingAdded: bookingsAdapter.addOne,
     bookingUpdated: bookingsAdapter.upsertOne,
     bookingRemoved: bookingsAdapter.removeOne,
-
     bookingSelected(state, action: PayloadAction<string | null>) {
       state.selectedBookingId = action.payload;
     },
