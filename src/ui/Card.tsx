@@ -1,4 +1,3 @@
-// ui/card.ts
 import styled, { css } from 'styled-components';
 
 type CardProps = {
