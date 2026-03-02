@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const PropertySchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
 
   name: z.string().min(1, 'Property name is required'),
 
@@ -9,7 +9,7 @@ export const PropertySchema = z.object({
 
   capacity: z.number().int().positive('Capacity must be greater than 0'),
 
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 });
 
 export const CreatePropertySchema = PropertySchema.omit({

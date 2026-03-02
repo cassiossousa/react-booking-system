@@ -12,6 +12,8 @@ const mockState: RootState = {
         id: 'p1',
         name: 'Beach House',
         location: 'Miami',
+        capacity: 0,
+        createdAt: '2024-01-01T00:00:00.000Z',
       },
     },
     selectedPropertyId: 'p1',

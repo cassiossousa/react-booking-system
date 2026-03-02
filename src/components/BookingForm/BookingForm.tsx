@@ -9,10 +9,11 @@ import { selectSelectedBooking } from '../../features/bookings/bookings.selector
 import { selectAllProperties } from '../../features/properties/properties.selectors';
 import { Input } from '../../ui/Input';
 import { Button } from '../../ui/Button';
-import { Form, Row, Error } from './BookingForm.styles';
 import { SelectWrapper } from '../../ui/SelectWrapper';
 import { Select } from '../../ui/Select';
 import type { CreateBookingInput } from '../../features/bookings/domain/booking.schema';
+import { Error, Form } from '../../ui/Form';
+import { Row } from '../../styles/primitives';
 
 export const BookingForm = () => {
   const dispatch = useAppDispatch();

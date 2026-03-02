@@ -4,12 +4,7 @@ import {
   type PayloadAction,
 } from '@reduxjs/toolkit';
 import type { RootState } from '../../app/store';
-
-export interface Property {
-  id: string;
-  name: string;
-  location: string;
-}
+import type { Property } from './domain/property.schema';
 
 const propertiesAdapter = createEntityAdapter<Property>();
 
