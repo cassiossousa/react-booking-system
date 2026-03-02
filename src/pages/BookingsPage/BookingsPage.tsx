@@ -6,7 +6,7 @@ import { Card } from '../../ui/Card';
 export const BookingsPage = () => {
   return (
     <PageContainer>
-      <Title>Create Booking</Title>
+      <Title>Bookings</Title>
       <Row>
         <Column>
           <Card>

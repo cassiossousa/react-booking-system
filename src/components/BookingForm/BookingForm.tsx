@@ -1,85 +1,72 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   bookingAdded,
   bookingUpdated,
   bookingSelected,
 } from '../../features/bookings/bookings.slice';
+
 import { selectSelectedBooking } from '../../features/bookings/bookings.selectors';
 import { selectAllProperties } from '../../features/properties/properties.selectors';
+
 import { Input } from '../../ui/Input';
 import { Button } from '../../ui/Button';
 import { SelectWrapper } from '../../ui/SelectWrapper';
 import { Select } from '../../ui/Select';
-import type { CreateBookingInput } from '../../features/bookings/domain/booking.schema';
 import { Error, Form } from '../../ui/Form';
 import { Row } from '../../styles/primitives';
 
+import {
+  CreateBookingSchema,
+  type CreateBookingInput,
+} from '../../features/bookings/domain/booking.schema';
+
 export const BookingForm = () => {
   const dispatch = useAppDispatch();
-
   const selectedBooking = useAppSelector(selectSelectedBooking);
   const properties = useAppSelector(selectAllProperties);
 
-  const [error, setError] = useState('');
-  const [form, setForm] = useState<CreateBookingInput>({
-    propertyId: '',
-    guestName: '',
-    checkIn: '',
-    checkOut: '',
-  });
-
   const isEditing = Boolean(selectedBooking);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<CreateBookingInput>({
+    resolver: zodResolver(CreateBookingSchema),
+    defaultValues: {
+      propertyId: '',
+      guestName: '',
+      checkIn: '',
+      checkOut: '',
+    },
+  });
 
   // Prefill form when editing
   useEffect(() => {
     if (selectedBooking) {
       const { propertyId, guestName, checkIn, checkOut } = selectedBooking;
 
-      setForm({
+      reset({
         propertyId,
         guestName,
         checkIn,
         checkOut,
       });
     }
-  }, [selectedBooking]);
+  }, [selectedBooking, reset]);
 
-  const resetForm = () => {
-    setForm({
-      propertyId: '',
-      guestName: '',
-      checkIn: '',
-      checkOut: '',
-    });
-    setError('');
-    dispatch(bookingSelected(null));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!form.propertyId) {
-      setError('Please select a property');
-      return;
-    }
-
-    if (!form.guestName) {
-      setError('Guest name is required');
-      return;
-    }
-
-    if (form.checkIn >= form.checkOut) {
-      setError('Check-out must be after check-in');
-      return;
-    }
-
+  const onSubmit = (data: CreateBookingInput) => {
     if (isEditing && selectedBooking) {
       dispatch(
         bookingUpdated({
           id: selectedBooking.id,
           createdAt: selectedBooking.createdAt,
-          ...form,
+          ...data,
         }),
       );
     } else {
@@ -87,29 +74,30 @@ export const BookingForm = () => {
         bookingAdded({
           id: crypto.randomUUID(),
           createdAt: new Date().toISOString(),
-          ...form,
+          ...data,
         }),
       );
     }
 
-    resetForm();
+    handleReset();
+  };
+
+  const handleReset = () => {
+    reset({
+      propertyId: '',
+      guestName: '',
+      checkIn: '',
+      checkOut: '',
+    });
+
+    dispatch(bookingSelected(null));
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit(onSubmit)}>
       <SelectWrapper>
-        <Select
-          value={form.propertyId}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              propertyId: e.target.value,
-            })
-          }
-        >
-          <option value="" disabled>
-            Select property
-          </option>
+        <Select {...register('propertyId')}>
+          <option value="">Select property</option>
 
           {properties.map((property) => (
             <option key={property.id} value={property.id}>
@@ -119,42 +107,21 @@ export const BookingForm = () => {
         </Select>
       </SelectWrapper>
 
-      <Input
-        placeholder="Guest Name"
-        value={form.guestName}
-        onChange={(e) =>
-          setForm({
-            ...form,
-            guestName: e.target.value,
-          })
-        }
-      />
+      {errors.propertyId && <Error>{errors.propertyId.message}</Error>}
+
+      <Input placeholder="Guest Name" {...register('guestName')} />
+
+      {errors.guestName && <Error>{errors.guestName.message}</Error>}
 
       <Row>
-        <Input
-          type="date"
-          value={form.checkIn}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              checkIn: e.target.value,
-            })
-          }
-        />
+        <Input type="date" {...register('checkIn')} />
 
-        <Input
-          type="date"
-          value={form.checkOut}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              checkOut: e.target.value,
-            })
-          }
-        />
+        <Input type="date" {...register('checkOut')} />
       </Row>
 
-      {error && <Error>{error}</Error>}
+      {(errors.checkIn || errors.checkOut) && (
+        <Error>{errors.checkIn?.message || errors.checkOut?.message}</Error>
+      )}
 
       <Row>
         <Button type="submit">
@@ -162,7 +129,7 @@ export const BookingForm = () => {
         </Button>
 
         {isEditing && (
-          <Button type="button" variant="ghost" onClick={resetForm}>
+          <Button type="button" variant="ghost" onClick={handleReset}>
             Cancel
           </Button>
         )}
