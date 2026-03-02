@@ -2,7 +2,7 @@ import {
   PropertyValidationError,
   PropertyAlreadyExistsError,
 } from './property.errors';
-import type { Property, CreatePropertyInput } from '../types';
+import type { CreatePropertyInput, Property } from './property.schema';
 
 export const validatePropertyInput = (input: CreatePropertyInput) => {
   if (!input.name.trim()) {

@@ -11,6 +11,7 @@ const mockState: RootState = {
         guestName: 'John',
         checkIn: '2026-01-01',
         checkOut: '2026-01-02',
+        createdAt: '2025-12-01T12:00:00Z',
       },
     },
     selectedBookingId: '1',

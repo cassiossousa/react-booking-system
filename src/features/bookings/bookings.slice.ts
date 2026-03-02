@@ -4,14 +4,7 @@ import {
   type PayloadAction,
 } from '@reduxjs/toolkit';
 import type { RootState } from '../../app/store';
-
-export interface Booking {
-  id: string;
-  propertyId: string;
-  guestName: string;
-  checkIn: string;
-  checkOut: string;
-}
+import type { Booking } from './domain/booking.schema';
 
 const bookingsAdapter = createEntityAdapter<Booking>();
 

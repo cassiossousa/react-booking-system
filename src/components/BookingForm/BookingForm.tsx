@@ -10,9 +10,9 @@ import { selectAllProperties } from '../../features/properties/properties.select
 import { Input } from '../../ui/Input';
 import { Button } from '../../ui/Button';
 import { Form, Row, Error } from './BookingForm.styles';
-import type { Booking } from '../../features/bookings/types';
 import { SelectWrapper } from '../../ui/SelectWrapper';
 import { Select } from '../../ui/Select';
+import type { CreateBookingInput } from '../../features/bookings/domain/booking.schema';
 
 export const BookingForm = () => {
   const dispatch = useAppDispatch();
@@ -21,7 +21,7 @@ export const BookingForm = () => {
   const properties = useAppSelector(selectAllProperties);
 
   const [error, setError] = useState('');
-  const [form, setForm] = useState<Omit<Booking, 'id'>>({
+  const [form, setForm] = useState<CreateBookingInput>({
     propertyId: '',
     guestName: '',
     checkIn: '',
@@ -77,6 +77,7 @@ export const BookingForm = () => {
       dispatch(
         bookingUpdated({
           id: selectedBooking.id,
+          createdAt: selectedBooking.createdAt,
           ...form,
         }),
       );
@@ -84,6 +85,7 @@ export const BookingForm = () => {
       dispatch(
         bookingAdded({
           id: crypto.randomUUID(),
+          createdAt: new Date().toISOString(),
           ...form,
         }),
       );

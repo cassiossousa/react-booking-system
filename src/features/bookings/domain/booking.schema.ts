@@ -1,23 +1,21 @@
 import { z } from 'zod';
-import { parseISO, isBefore } from 'date-fns';
 
-export const bookingSchema = z
-  .object({
-    propertyId: z.string().min(1, 'Property is required'),
-    guestName: z.string().min(2, 'Guest name must be at least 2 characters'),
-    startDate: z.string(),
-    endDate: z.string(),
-  })
-  .refine(
-    (data) => {
-      const start = parseISO(data.startDate);
-      const end = parseISO(data.endDate);
-      return isBefore(start, end);
-    },
-    {
-      message: 'End date must be after start date',
-      path: ['endDate'],
-    },
-  );
+export const BookingSchema = z.object({
+  id: z.uuid(),
+  propertyId: z.uuid(),
+  guestName: z.string().min(2),
+  checkIn: z.iso.datetime(),
+  checkOut: z.iso.datetime(),
+  createdAt: z.iso.datetime(),
+});
 
-export type BookingFormValues = z.infer<typeof bookingSchema>;
+export const CreateBookingSchema = BookingSchema.omit({
+  id: true,
+  createdAt: true,
+});
+
+export type Booking = z.infer<typeof BookingSchema>;
+export type CreateBookingInput = z.infer<typeof CreateBookingSchema>;
+export interface BookingWithProperty extends Booking {
+  propertyName: string;
+}

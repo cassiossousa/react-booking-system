@@ -1,23 +1,15 @@
 import { createSelector } from '@reduxjs/toolkit';
-import type { RootState } from '../../app/store';
+
 import { bookingsSelectors } from './bookings.slice';
 import { propertiesSelectors } from '../properties/properties.slice';
-import type { BookingWithProperty } from './types';
+import type { RootState } from '../../app/store';
+import type { BookingWithProperty } from './domain/booking.schema';
 
-/**
- * Basic adapter selectors
- */
 export const selectAllBookings = bookingsSelectors.selectAll;
-
 export const selectBookingById = bookingsSelectors.selectById;
-
 export const selectBookingIds = bookingsSelectors.selectIds;
-
 export const selectBookingEntities = bookingsSelectors.selectEntities;
 
-/**
- * Selected booking (raw entity)
- */
 export const selectSelectedBookingId = (state: RootState) =>
   state.bookings.selectedBookingId;
 
@@ -28,9 +20,6 @@ export const selectSelectedBooking = createSelector(
     selectedId ? (entities[selectedId] ?? null) : null,
 );
 
-/**
- * Enriched selectors (join with properties)
- */
 export const selectAllBookingsWithProperty = createSelector(
   selectAllBookings,
   propertiesSelectors.selectEntities,
@@ -41,7 +30,7 @@ export const selectAllBookingsWithProperty = createSelector(
     })),
 );
 
-export const selectBookingWithProperty = (bookingId: string) =>
+export const makeSelectBookingWithProperty = (bookingId: string) =>
   createSelector(
     (state: RootState) => bookingsSelectors.selectById(state, bookingId),
     propertiesSelectors.selectEntities,

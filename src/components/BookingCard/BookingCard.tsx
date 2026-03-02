@@ -1,4 +1,4 @@
-import type { BookingWithProperty } from '../../features/bookings/types';
+import type { BookingWithProperty } from '../../features/bookings/domain/booking.schema';
 import { Button } from '../../ui/Button';
 import { Card } from '../../ui/Card';
 import { Actions, Dates, Guest, Header, Property } from './BookingCard.styles';

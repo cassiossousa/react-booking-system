@@ -7,7 +7,7 @@ import {
 } from '../../features/bookings/bookings.slice';
 import { BookingCard } from '../BookingCard/BookingCard';
 import EmptyState from '../EmptyState/EmptyState';
-import type { BookingWithProperty } from '../../features/bookings/types';
+import type { BookingWithProperty } from '../../features/bookings/domain/booking.schema';
 
 export const BookingList = () => {
   const dispatch = useAppDispatch();

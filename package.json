@@ -5,7 +5,7 @@
   "type": "module",
   "homepage": "https://cassiossousa.github.io/react-booking-system",
   "scripts": {
-    "build": "tsc && vite build",
+    "build": "vite build",
     "cypress": "cypress open",
     "dev": "vite",
     "lint": "eslint .",
@@ -13,6 +13,7 @@
     "preview": "vite preview",
     "prettier": "prettier --check .",
     "prettier-fix": "prettier --write .",
+    "tsc": "tsc --noEmit",
     "test": "vitest",
     "test-cov": "vitest --coverage",
     "test-watch": "vitest --watch --coverage"

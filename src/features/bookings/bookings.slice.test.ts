@@ -4,16 +4,17 @@ import reducer, {
   bookingRemoved,
   bookingSelected,
   bookingsSelectors,
-  type Booking,
 } from './bookings.slice';
+import type { Booking } from './domain/booking.schema';
 
-describe('bookings slice - full coverage', () => {
+describe('bookings slice', () => {
   const baseBooking: Booking = {
     id: '1',
     propertyId: 'p1',
     guestName: 'John Doe',
     checkIn: '2026-01-01',
     checkOut: '2026-01-05',
+    createdAt: '2025-12-01T12:00:00Z',
   };
 
   const secondBooking: Booking = {
@@ -22,6 +23,7 @@ describe('bookings slice - full coverage', () => {
     guestName: 'Alice',
     checkIn: '2026-02-01',
     checkOut: '2026-02-03',
+    createdAt: '2025-12-02T12:00:00Z',
   };
 
   /* ------------------ INITIAL STATE ------------------ */
