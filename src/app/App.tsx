@@ -4,7 +4,7 @@ import { GlobalStyle } from '../styles/globalStyles';
 import { Provider } from 'react-redux';
 import { store } from './store';
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route, HashRouter } from 'react-router-dom';
 
 import { BookingsPage } from '../pages/BookingsPage/BookingsPage';
 import { PropertiesPage } from '../pages/PropertiesPage/PropertiesPage';
@@ -14,14 +14,14 @@ export const App = () => (
   <Provider store={store}>
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route element={<AppLayout />}>
             <Route index element={<BookingsPage />} />
             <Route path="properties" element={<PropertiesPage />} />
           </Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </ThemeProvider>
   </Provider>
 );
