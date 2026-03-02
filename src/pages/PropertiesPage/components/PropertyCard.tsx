@@ -28,11 +28,11 @@ export const PropertyCard = ({ property, onDelete, onEdit }: Props) => {
       </Capacity>
 
       <Actions>
-        <Button variant="ghost" onClick={() => onEdit(property)}>
+        <Button $variant="ghost" onClick={() => onEdit(property)}>
           Edit
         </Button>
 
-        <Button variant="danger" onClick={() => onDelete(property.id)}>
+        <Button $variant="danger" onClick={() => onDelete(property.id)}>
           Delete
         </Button>
       </Actions>

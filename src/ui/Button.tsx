@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 interface Props {
-  variant?: 'primary' | 'danger' | 'ghost';
+  $variant?: 'primary' | 'danger' | 'ghost';
 }
 
 export const Button = styled.button<Props>`
@@ -12,8 +12,8 @@ export const Button = styled.button<Props>`
   cursor: pointer;
   transition: all 0.2s ease;
 
-  ${({ variant, theme }) => {
-    switch (variant) {
+  ${({ $variant, theme }) => {
+    switch ($variant) {
       case 'danger':
         return `
           background: ${theme.colors.danger};

@@ -22,11 +22,11 @@ export const BookingCard = ({ booking, onDelete, onEdit }: Props) => {
       </Dates>
 
       <Actions>
-        <Button variant="ghost" onClick={() => onEdit(booking)}>
+        <Button $variant="ghost" onClick={() => onEdit(booking)}>
           Edit
         </Button>
 
-        <Button variant="danger" onClick={() => onDelete(booking.id)}>
+        <Button $variant="danger" onClick={() => onDelete(booking.id)}>
           Delete
         </Button>
       </Actions>

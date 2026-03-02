@@ -17,29 +17,34 @@ export const BookingSchema = z.object({
 export const CreateBookingSchema = BookingSchema.omit({
   id: true,
   createdAt: true,
-}).superRefine((data, ctx) => {
-  const duration = differenceInDays(data.checkOut, data.checkIn);
+})
+  .extend({
+    checkIn: z.iso.date(),
+    checkOut: z.iso.date(),
+  })
+  .superRefine((data, ctx) => {
+    const duration = differenceInDays(data.checkOut, data.checkIn);
 
-  if (duration < MIN_BOOKING_DURATION_DAYS) {
-    ctx.addIssue({
-      code: 'custom',
-      message: `Booking must be at least ${MIN_BOOKING_DURATION_DAYS} day${
-        MIN_BOOKING_DURATION_DAYS > 1 ? 's' : ''
-      }`,
-      path: ['checkOut'],
-    });
-  }
+    if (duration < MIN_BOOKING_DURATION_DAYS) {
+      ctx.addIssue({
+        code: 'custom',
+        message: `Booking must be at least ${MIN_BOOKING_DURATION_DAYS} day${
+          MIN_BOOKING_DURATION_DAYS > 1 ? 's' : ''
+        }`,
+        path: ['checkOut'],
+      });
+    }
 
-  if (duration > MAX_BOOKING_DURATION_DAYS) {
-    ctx.addIssue({
-      code: 'custom',
-      message: `Booking exceeds maximum duration of ${MAX_BOOKING_DURATION_DAYS} day${
-        MAX_BOOKING_DURATION_DAYS > 1 ? 's' : ''
-      }`,
-      path: ['checkOut'],
-    });
-  }
-});
+    if (duration > MAX_BOOKING_DURATION_DAYS) {
+      ctx.addIssue({
+        code: 'custom',
+        message: `Booking exceeds maximum duration of ${MAX_BOOKING_DURATION_DAYS} day${
+          MAX_BOOKING_DURATION_DAYS > 1 ? 's' : ''
+        }`,
+        path: ['checkOut'],
+      });
+    }
+  });
 
 export type Booking = z.infer<typeof BookingSchema>;
 export type CreateBookingInput = z.infer<typeof CreateBookingSchema>;
