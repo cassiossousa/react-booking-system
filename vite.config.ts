@@ -1,3 +1,6 @@
-import { viteBaseConfig } from './vite.base.config';
+import { defineConfig } from 'vite';
+import { getViteBaseConfig } from './vite.base.config';
 
-export default { ...viteBaseConfig };
+export default defineConfig(({ command }) => {
+  return getViteBaseConfig(command);
+});
