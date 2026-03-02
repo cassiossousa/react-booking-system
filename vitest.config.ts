@@ -9,6 +9,7 @@ export default mergeConfig(
       // If not all your files should have this environment, you can use a
       // `// @vitest-environment jsdom` comment at the top of the test files instead.
       environment: 'jsdom',
+      setupFiles: ['./setupTests.ts'],
       globals: true,
       watch: false,
       coverage: {
