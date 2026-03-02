@@ -24,7 +24,7 @@ import {
   type CreateBookingInput,
 } from '../../../features/bookings/domain/booking.schema';
 
-export const BookingsForm = () => {
+export const BookingForm = () => {
   const dispatch = useAppDispatch();
   const selectedBooking = useAppSelector(selectSelectedBooking);
   const properties = useAppSelector(selectAllProperties);

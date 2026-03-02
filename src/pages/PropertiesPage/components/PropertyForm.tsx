@@ -14,7 +14,7 @@ type Props = {
   onSubmit: (data: CreatePropertyInput) => void;
 };
 
-export const PropertiesForm = ({ onSubmit }: Props) => {
+export const PropertyForm = ({ onSubmit }: Props) => {
   const {
     register,
     handleSubmit,

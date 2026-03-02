@@ -1,7 +1,7 @@
 import type { BookingWithProperty } from '../../../features/bookings/domain/booking.schema';
 import { Button } from '../../../ui/Button';
 import { Card } from '../../../ui/Card';
-import { Actions, Dates, Guest, Header, Property } from './BookingsCard.styles';
+import { Actions, Dates, Guest, Header, Property } from './BookingCard.styles';
 
 interface Props {
   booking: BookingWithProperty;
@@ -9,9 +9,9 @@ interface Props {
   onEdit: (booking: BookingWithProperty) => void;
 }
 
-export const BookingsCard = ({ booking, onDelete, onEdit }: Props) => {
+export const BookingCard = ({ booking, onDelete, onEdit }: Props) => {
   return (
-    <Card hover>
+    <Card $hover>
       <Header>
         <Property>{booking.propertyName}</Property>
         <Guest>{booking.guestName}</Guest>

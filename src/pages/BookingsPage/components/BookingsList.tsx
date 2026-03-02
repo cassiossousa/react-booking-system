@@ -5,9 +5,10 @@ import {
   bookingRemoved,
   bookingSelected,
 } from '../../../features/bookings/bookings.slice';
-import { BookingsCard } from './BookingsCard';
+import { BookingCard } from './BookingCard';
 import type { BookingWithProperty } from '../../../features/bookings/domain/booking.schema';
-import EmptyState from './EmptyState';
+import EmptyState from '../../../ui/EmptyState';
+import { Wrapper } from './BookingsList.styles';
 
 export const BookingsList = () => {
   const dispatch = useAppDispatch();
@@ -32,15 +33,15 @@ export const BookingsList = () => {
   }
 
   return (
-    <>
+    <Wrapper>
       {bookings.map((booking) => (
-        <BookingsCard
+        <BookingCard
           key={booking.id}
           booking={booking}
           onDelete={handleDelete}
           onEdit={handleEdit}
         />
       ))}
-    </>
+    </Wrapper>
   );
 };

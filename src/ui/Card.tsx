@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
 
-type CardProps = {
-  padding?: 'sm' | 'md' | 'lg';
-  hover?: boolean;
+export type CardProps = {
+  $padding?: 'sm' | 'md' | 'lg';
+  $hover?: boolean;
 };
 
 export const Card = styled.div<CardProps>`
@@ -11,19 +11,19 @@ export const Card = styled.div<CardProps>`
   border: 1px solid ${({ theme }) => theme.colors.border};
   box-shadow: ${({ theme }) => theme.shadow.sm};
 
-  ${({ theme, padding = 'md' }) => {
+  ${({ theme, $padding = 'md' }) => {
     const map = {
       sm: theme.spacing(3),
       md: theme.spacing(4),
       lg: theme.spacing(5),
     };
     return css`
-      padding: ${map[padding]};
+      padding: ${map[$padding]};
     `;
   }}
 
-  ${({ hover, theme }) =>
-    hover &&
+  ${({ $hover, theme }) =>
+    $hover &&
     css`
       transition: box-shadow 0.2s ease;
       &:hover {

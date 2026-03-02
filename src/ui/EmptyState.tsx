@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Card } from '../../../ui/Card';
+import { Card } from './Card';
 
 const Wrapper = styled(Card)`
   text-align: center;
@@ -11,5 +11,5 @@ type Props = {
 };
 
 export default function EmptyState({ children }: Props) {
-  return <Wrapper padding="lg">{children}</Wrapper>;
+  return <Wrapper $padding="lg">{children}</Wrapper>;
 }
