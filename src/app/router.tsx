@@ -1,9 +1,9 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createHashRouter } from 'react-router-dom';
 import { AppLayout } from './layout/AppLayout';
 import { BookingsPage } from '../pages/BookingsPage/BookingsPage';
 import { PropertiesPage } from '../pages/PropertiesPage/PropertiesPage';
 
-export const router = createBrowserRouter([
+export const router = createHashRouter([
   {
     path: '/',
     element: <AppLayout />,
