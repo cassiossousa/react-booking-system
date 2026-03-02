@@ -79,9 +79,9 @@ src/
  │         └── bookings.test.ts
  │
  ├── components/
- │    ├── BookingForm/
- │    ├── BookingList/
- │    ├── BookingCard/
+ │    ├── BookingsForm/
+ │    ├── BookingsList/
+ │    ├── BookingsCard/
  │    ├── PropertySelector/
  │    └── UI/
  │
@@ -216,7 +216,7 @@ Mobile:
 
 ## 13. Create & Update Strategy
 
-- Single BookingForm
+- Single BookingsForm
 - If editingBooking exists: update mode
 - Otherwise: create mode
 
@@ -239,7 +239,7 @@ Mobile:
 
 ### 14.3. Snapshot Tests
 
-- BookingCard snapshot
+- BookingsCard snapshot
 
 ### 14.4. Cypress E2E
 

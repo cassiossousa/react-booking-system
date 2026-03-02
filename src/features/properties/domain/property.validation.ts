@@ -2,20 +2,23 @@ import {
   PropertyValidationError,
   PropertyAlreadyExistsError,
 } from './property.errors';
-import type { CreatePropertyInput, Property } from './property.schema';
+import {
+  CreatePropertySchema,
+  type CreatePropertyInput,
+  type Property,
+} from './property.schema';
 
-export const validatePropertyInput = (input: CreatePropertyInput) => {
-  if (!input.name.trim()) {
-    throw new PropertyValidationError('Property name is required');
+export const validatePropertyInput = (
+  input: CreatePropertyInput,
+): CreatePropertyInput => {
+  const result = CreatePropertySchema.safeParse(input);
+
+  if (!result.success) {
+    const message = result.error.issues[0]?.message ?? 'Invalid property data';
+    throw new PropertyValidationError(message);
   }
 
-  if (!input.location.trim()) {
-    throw new PropertyValidationError('Property location is required');
-  }
-
-  if (input.capacity <= 0) {
-    throw new PropertyValidationError('Capacity must be greater than 0');
-  }
+  return result.data;
 };
 
 export const ensureUniquePropertyName = (

@@ -2,29 +2,29 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
   bookingAdded,
   bookingUpdated,
   bookingSelected,
-} from '../../features/bookings/bookings.slice';
+} from '../../../features/bookings/bookings.slice';
 
-import { selectSelectedBooking } from '../../features/bookings/bookings.selectors';
-import { selectAllProperties } from '../../features/properties/properties.selectors';
+import { selectSelectedBooking } from '../../../features/bookings/bookings.selectors';
+import { selectAllProperties } from '../../../features/properties/properties.selectors';
 
-import { Input } from '../../ui/Input';
-import { Button } from '../../ui/Button';
-import { SelectWrapper } from '../../ui/SelectWrapper';
-import { Select } from '../../ui/Select';
-import { Error, Form } from '../../ui/Form';
-import { Row } from '../../styles/primitives';
+import { Input } from '../../../ui/Input';
+import { Button } from '../../../ui/Button';
+import { SelectWrapper } from '../../../ui/SelectWrapper';
+import { Select } from '../../../ui/Select';
+import { Error, Form } from '../../../ui/Form';
+import { Row } from '../../../styles/primitives';
 
 import {
   CreateBookingSchema,
   type CreateBookingInput,
-} from '../../features/bookings/domain/booking.schema';
+} from '../../../features/bookings/domain/booking.schema';
 
-export const BookingForm = () => {
+export const BookingsForm = () => {
   const dispatch = useAppDispatch();
   const selectedBooking = useAppSelector(selectSelectedBooking);
   const properties = useAppSelector(selectAllProperties);

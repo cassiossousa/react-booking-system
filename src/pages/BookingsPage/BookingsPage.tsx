@@ -1,5 +1,5 @@
-import { BookingForm } from '../../components/BookingForm/BookingForm';
-import { BookingList } from '../../components/BookingList/BookingList';
+import { BookingsForm } from './components/BookingsForm';
+import { BookingsList } from './components/BookingsList';
 import { PageContainer, Title, Row, Column } from '../../styles/primitives';
 import { Card } from '../../ui/Card';
 
@@ -10,11 +10,11 @@ export const BookingsPage = () => {
       <Row>
         <Column>
           <Card>
-            <BookingForm />
+            <BookingsForm />
           </Card>
         </Column>
         <Column>
-          <BookingList />
+          <BookingsList />
         </Column>
       </Row>
     </PageContainer>
