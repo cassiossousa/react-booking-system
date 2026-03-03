@@ -12,10 +12,9 @@ import {
 import { selectSelectedBooking } from '../../../features/bookings/bookings.selectors';
 import { selectAllProperties } from '../../../features/properties/properties.selectors';
 
-import { Input } from '../../../ui/Input';
+import { Field, Input } from '../../../ui/Input';
 import { Button } from '../../../ui/Button';
-import { SelectWrapper } from '../../../ui/SelectWrapper';
-import { Select } from '../../../ui/Select';
+import { SelectWrapper } from '../../../ui/Select';
 import { Error, Form } from '../../../ui/Form';
 import { Row } from '../../../styles/primitives';
 
@@ -37,7 +36,7 @@ export const BookingForm = () => {
     handleSubmit,
     reset,
     setError,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<CreateBookingInput>({
     resolver: zodResolver(CreateBookingSchema),
     defaultValues: {
@@ -46,8 +45,10 @@ export const BookingForm = () => {
       checkIn: format(new Date(), 'yyyy-MM-dd'),
       checkOut: format(addDays(new Date(), 1), 'yyyy-MM-dd'),
     },
+    mode: 'onBlur',
   });
 
+  // Prefill when editing
   useEffect(() => {
     if (selectedBooking) {
       reset({
@@ -60,10 +61,15 @@ export const BookingForm = () => {
   }, [selectedBooking, reset]);
 
   const onSubmit = async (data: CreateBookingInput) => {
+    if (!properties.length) {
+      setError('root', { message: 'Create a property first.' });
+      return;
+    }
+
     const toIso = (dateStr: string) =>
       new Date(`${dateStr}T00:00:00`).toISOString();
 
-    const bookingPayload = {
+    const payload = {
       id: selectedBooking?.id ?? crypto.randomUUID(),
       propertyId: data.propertyId,
       guests: data.guests,
@@ -72,11 +78,11 @@ export const BookingForm = () => {
       createdAt: selectedBooking?.createdAt ?? new Date().toISOString(),
     };
 
-    const resultAction = await dispatch(saveBooking(bookingPayload));
+    const result = await dispatch(saveBooking(payload));
 
-    if (saveBooking.rejected.match(resultAction)) {
+    if (saveBooking.rejected.match(result)) {
       setError('root', {
-        message: resultAction.payload ?? 'Failed to save booking',
+        message: result.payload ?? 'Failed to save booking',
       });
       return;
     }
@@ -97,30 +103,35 @@ export const BookingForm = () => {
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      <SelectWrapper>
-        <Select {...register('propertyId')}>
-          <option value="">Select property</option>
-          {properties.map((property) => (
-            <option key={property.id} value={property.id}>
-              {property.name}
-            </option>
-          ))}
-        </Select>
-      </SelectWrapper>
-      {errors.propertyId && <Error>{errors.propertyId.message}</Error>}
+      <Field label="Property" error={errors.propertyId?.message}>
+        <SelectWrapper $hasError={!!errors.propertyId}>
+          <select {...register('propertyId')} disabled={!properties.length}>
+            {properties.map((property) => (
+              <option key={property.id} value={property.id}>
+                {property.name}
+              </option>
+            ))}
+          </select>
+        </SelectWrapper>
+      </Field>
 
-      <Input
-        type="number"
-        min={1}
-        placeholder="Guests"
-        {...register('guests', { valueAsNumber: true })}
-      />
-      {errors.guests && <Error>{errors.guests.message}</Error>}
+      <Field label="Guests" error={errors.guests?.message}>
+        <Input
+          type="number"
+          min={1}
+          $hasError={!!errors.guests}
+          {...register('guests', { valueAsNumber: true })}
+        />
+      </Field>
 
-      <Row>
+      <Field label="Check-in">
         <Input type="date" {...register('checkIn')} />
+      </Field>
+
+      <Field label="Check-out">
         <Input type="date" {...register('checkOut')} />
-      </Row>
+      </Field>
+
       {(errors.checkIn || errors.checkOut) && (
         <Error>{errors.checkIn?.message || errors.checkOut?.message}</Error>
       )}
@@ -129,7 +140,7 @@ export const BookingForm = () => {
       {domainError && !errors.root && <Error>{domainError}</Error>}
 
       <Row>
-        <Button type="submit" disabled={loading}>
+        <Button type="submit" disabled={loading || !isValid}>
           {loading
             ? 'Saving...'
             : isEditing

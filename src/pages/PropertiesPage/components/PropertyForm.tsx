@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { selectSelectedProperty } from '../../../features/properties/properties.selectors';
 import { bookingsSelectors } from '../../../features/bookings/bookings.slice';
 
-import { Input } from '../../../ui/Input';
+import { Field, Input } from '../../../ui/Input';
 import { Button } from '../../../ui/Button';
 import { Error, Form } from '../../../ui/Form';
 import { Row } from '../../../styles/primitives';
@@ -21,6 +21,7 @@ import {
   propertySelected,
   propertyUpdated,
 } from '../../../features/properties/properties.slice';
+
 import { validateCapacityReduction } from '../../../features/properties/domain/property.validation';
 
 export const PropertyForm = () => {
@@ -82,7 +83,7 @@ export const PropertyForm = () => {
       }
 
       handleReset();
-    } catch (err: unknown) {
+    } catch (err) {
       setError('root', {
         message: (err as Error).message ?? 'Invalid property update',
       });
@@ -101,18 +102,22 @@ export const PropertyForm = () => {
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      <Input placeholder="Name" {...register('name')} />
-      {errors.name && <Error>{errors.name.message}</Error>}
+      <Field label="Name" error={errors.name?.message}>
+        <Input $hasError={!!errors.name} {...register('name')} />
+      </Field>
 
-      <Input placeholder="Location" {...register('location')} />
-      {errors.location && <Error>{errors.location.message}</Error>}
+      <Field label="Location" error={errors.location?.message}>
+        <Input $hasError={!!errors.location} {...register('location')} />
+      </Field>
 
-      <Input
-        type="number"
-        min={1}
-        {...register('capacity', { valueAsNumber: true })}
-      />
-      {errors.capacity && <Error>{errors.capacity.message}</Error>}
+      <Field label="Capacity" error={errors.capacity?.message}>
+        <Input
+          type="number"
+          min={1}
+          $hasError={!!errors.capacity}
+          {...register('capacity', { valueAsNumber: true })}
+        />
+      </Field>
 
       {errors.root && <Error>{errors.root.message}</Error>}
 

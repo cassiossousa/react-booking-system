@@ -8,7 +8,7 @@ const mockState: RootState = {
       '1': {
         id: '1',
         propertyId: 'p1',
-        guestName: 'John',
+        guests: 1,
         checkIn: '2026-01-01',
         checkOut: '2026-01-02',
         createdAt: '2025-12-01T12:00:00Z',
