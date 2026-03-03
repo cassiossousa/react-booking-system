@@ -11,11 +11,20 @@ import {
 
 interface Props {
   property: Property;
+  disableActions: boolean;
+  isEditing: boolean;
   onDelete: (id: string) => void;
   onEdit: (property: Property) => void;
 }
 
-export const PropertyCard = ({ property, onDelete, onEdit }: Props) => {
+export const PropertyCard = ({
+  property,
+  disableActions,
+  isEditing,
+  onDelete,
+  onEdit,
+}: Props) => {
+  const actionsDisabled = disableActions || isEditing;
   return (
     <Card $hover>
       <Header>
@@ -28,11 +37,19 @@ export const PropertyCard = ({ property, onDelete, onEdit }: Props) => {
       </Capacity>
 
       <Actions>
-        <Button $variant="ghost" onClick={() => onEdit(property)}>
-          Edit
+        <Button
+          $variant="ghost"
+          disabled={actionsDisabled}
+          onClick={() => onEdit(property)}
+        >
+          {isEditing ? 'Editing' : 'Edit'}
         </Button>
 
-        <Button $variant="danger" onClick={() => onDelete(property.id)}>
+        <Button
+          $variant="danger"
+          disabled={actionsDisabled}
+          onClick={() => onDelete(property.id)}
+        >
           Delete
         </Button>
       </Actions>

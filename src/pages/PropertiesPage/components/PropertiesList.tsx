@@ -1,6 +1,9 @@
 import { useAppSelector } from '../../../app/hooks';
 import EmptyState from '../../../ui/EmptyState';
-import { selectAllProperties } from '../../../features/properties/properties.selectors';
+import {
+  selectAllProperties,
+  selectSelectedProperty,
+} from '../../../features/properties/properties.selectors';
 
 import { useCallback } from 'react';
 import { useAppDispatch } from '../../../app/hooks';
@@ -15,6 +18,8 @@ import { Wrapper } from './PropertiesList.styles';
 export const PropertiesList = () => {
   const dispatch = useAppDispatch();
   const properties = useAppSelector(selectAllProperties);
+  const selectedProperty = useAppSelector(selectSelectedProperty);
+  const disableActions = Boolean(selectedProperty);
 
   const handleDelete = useCallback(
     (id: string) => {
@@ -40,6 +45,8 @@ export const PropertiesList = () => {
         <PropertyCard
           key={property.id}
           property={property}
+          disableActions={disableActions}
+          isEditing={Boolean(selectedProperty?.id === property.id)}
           onDelete={handleDelete}
           onEdit={handleEdit}
         />
