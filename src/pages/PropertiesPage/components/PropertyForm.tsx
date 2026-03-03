@@ -28,7 +28,7 @@ export const PropertyForm = () => {
   const dispatch = useAppDispatch();
   const selectedProperty = useAppSelector(selectSelectedProperty);
   const allBookings = useAppSelector(bookingsSelectors.selectAll);
-
+  const loading = useAppSelector((state) => state.properties.loading);
   const isEditing = Boolean(selectedProperty);
 
   const {
@@ -36,7 +36,7 @@ export const PropertyForm = () => {
     handleSubmit,
     reset,
     setError,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<CreatePropertyInput>({
     resolver: zodResolver(CreatePropertySchema),
     defaultValues: {
@@ -122,8 +122,12 @@ export const PropertyForm = () => {
       {errors.root && <Error>{errors.root.message}</Error>}
 
       <Row>
-        <Button type="submit">
-          {isEditing ? 'Update Property' : 'Create Property'}
+        <Button type="submit" disabled={loading || !isValid}>
+          {loading
+            ? 'Saving...'
+            : isEditing
+              ? 'Update Property'
+              : 'Create Property'}
         </Button>
 
         {isEditing && (
