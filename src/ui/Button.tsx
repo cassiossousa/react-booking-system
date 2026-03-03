@@ -40,7 +40,7 @@ export const Button = styled.button<Props>`
 
   &:disabled {
     opacity: 0.5;
-    cursor: not-allowed;
+    cursor: default;
     transform: none;
   }
 `;

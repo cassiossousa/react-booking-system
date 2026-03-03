@@ -3,7 +3,6 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 
 import EmptyState from '../../../ui/EmptyState';
 import { PropertyCard } from './PropertyCard';
-import { Wrapper } from './PropertiesList.styles';
 
 import {
   selectAllProperties,
@@ -16,6 +15,7 @@ import {
 } from '../../../features/properties/properties.slice';
 
 import type { Property } from '../../../features/properties/domain/property.schema';
+import styled from 'styled-components';
 
 export const PropertiesList = () => {
   const dispatch = useAppDispatch();
@@ -55,3 +55,9 @@ export const PropertiesList = () => {
     </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing(2)};
+`;

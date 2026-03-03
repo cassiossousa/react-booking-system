@@ -1,35 +1,49 @@
 import type { BookingWithProperty } from '../../../features/bookings/domain/booking.schema';
-import { Button } from '../../../ui/Button';
-import { Card } from '../../../ui/Card';
-import { Actions, Dates, Guest, Header, Property } from './BookingCard.styles';
+import { EditableCard } from '../../../ui/EditableCard';
+import { format } from 'date-fns';
+import styled from 'styled-components';
 
 interface Props {
   booking: BookingWithProperty;
+  disableActions: boolean;
+  isEditing: boolean;
   onDelete: (id: string) => void;
   onEdit: (booking: BookingWithProperty) => void;
 }
 
-export const BookingCard = ({ booking, onDelete, onEdit }: Props) => {
+export const BookingCard = ({
+  booking,
+  disableActions,
+  isEditing,
+  onDelete,
+  onEdit,
+}: Props) => {
+  const formattedCheckIn = format(new Date(booking.checkIn), 'dd/MM/yyyy');
+  const formattedCheckOut = format(new Date(booking.checkOut), 'dd/MM/yyyy');
+
   return (
-    <Card $hover>
-      <Header>
-        <Property>{booking.propertyName}</Property>
-        <Guest>{booking.guestName}</Guest>
-      </Header>
-
-      <Dates>
-        {booking.checkIn} → {booking.checkOut}
-      </Dates>
-
-      <Actions>
-        <Button $variant="ghost" onClick={() => onEdit(booking)}>
-          Edit
-        </Button>
-
-        <Button $variant="danger" onClick={() => onDelete(booking.id)}>
-          Delete
-        </Button>
-      </Actions>
-    </Card>
+    <EditableCard
+      title={booking.propertyName}
+      subtitle={booking.guestName}
+      body={
+        <Dates>
+          <span>Check-in: {formattedCheckIn}</span>
+          <span>Check-out: {formattedCheckOut}</span>
+        </Dates>
+      }
+      isEditing={isEditing}
+      disableActions={disableActions}
+      onEdit={() => onEdit(booking)}
+      onDelete={() => onDelete(booking.id)}
+      confirmTitle="Delete Booking"
+      confirmDescription={`Are you sure you want to delete this booking for "${booking.guestName}"?`}
+    />
   );
 };
+
+const Dates = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  margin-bottom: ${({ theme }) => theme.spacing(2)};
+`;

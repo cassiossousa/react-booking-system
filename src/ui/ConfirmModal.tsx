@@ -7,6 +7,8 @@ interface Props {
   onConfirm: () => void;
   onCancel: () => void;
   confirmVariant?: ButtonVariant;
+  cancelText?: string;
+  confirmText?: string;
 }
 
 const Overlay = styled.div`
@@ -40,6 +42,8 @@ export const ConfirmModal = ({
   onConfirm,
   onCancel,
   confirmVariant = 'danger',
+  cancelText = 'No',
+  confirmText = 'Yes',
 }: Props) => {
   return (
     <Overlay>
@@ -49,11 +53,11 @@ export const ConfirmModal = ({
 
         <Actions>
           <Button $variant="ghost" onClick={onCancel}>
-            Cancel
+            {cancelText}
           </Button>
 
           <Button $variant={confirmVariant} onClick={onConfirm}>
-            Confirm
+            {confirmText}
           </Button>
         </Actions>
       </Modal>
