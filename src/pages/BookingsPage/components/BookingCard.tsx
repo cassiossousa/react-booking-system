@@ -24,7 +24,7 @@ export const BookingCard = ({
   return (
     <EditableCard
       title={booking.propertyName}
-      subtitle={booking.guestName}
+      subtitle={`${booking.guests} guest${booking.guests === 1 ? '' : 's'}`}
       body={
         <Dates>
           <span>Check-in: {formattedCheckIn}</span>
@@ -36,7 +36,7 @@ export const BookingCard = ({
       onEdit={() => onEdit(booking)}
       onDelete={() => onDelete(booking.id)}
       confirmTitle="Delete Booking"
-      confirmDescription={`Are you sure you want to delete this booking for "${booking.guestName}"?`}
+      confirmDescription="Are you sure you want to delete this booking?"
     />
   );
 };

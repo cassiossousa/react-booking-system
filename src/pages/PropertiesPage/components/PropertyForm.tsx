@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { selectSelectedProperty } from '../../../features/properties/properties.selectors';
+import { bookingsSelectors } from '../../../features/bookings/bookings.slice';
 
 import { Input } from '../../../ui/Input';
 import { Button } from '../../../ui/Button';
@@ -20,16 +21,20 @@ import {
   propertySelected,
   propertyUpdated,
 } from '../../../features/properties/properties.slice';
+import { validateCapacityReduction } from '../../../features/properties/domain/property.validation';
 
 export const PropertyForm = () => {
   const dispatch = useAppDispatch();
   const selectedProperty = useAppSelector(selectSelectedProperty);
+  const allBookings = useAppSelector(bookingsSelectors.selectAll);
+
   const isEditing = Boolean(selectedProperty);
 
   const {
     register,
     handleSubmit,
     reset,
+    setError,
     formState: { errors },
   } = useForm<CreatePropertyInput>({
     resolver: zodResolver(CreatePropertySchema),
@@ -41,38 +46,47 @@ export const PropertyForm = () => {
     mode: 'onBlur',
   });
 
-  // Prefill form when editing
   useEffect(() => {
     if (selectedProperty) {
-      const { name, location, capacity } = selectedProperty;
-
       reset({
-        name,
-        location,
-        capacity,
+        name: selectedProperty.name,
+        location: selectedProperty.location,
+        capacity: selectedProperty.capacity,
       });
     }
   }, [selectedProperty, reset]);
 
   const onSubmit = (data: CreatePropertyInput) => {
-    if (isEditing && selectedProperty) {
-      dispatch(
-        propertyUpdated({
-          ...selectedProperty,
-          ...data,
-        }),
-      );
-    } else {
-      dispatch(
-        propertyAdded({
-          ...data,
-          id: crypto.randomUUID(),
-          createdAt: new Date().toISOString(),
-        }),
-      );
-    }
+    try {
+      if (isEditing && selectedProperty) {
+        validateCapacityReduction(
+          selectedProperty.id,
+          data.capacity,
+          allBookings,
+        );
 
-    handleReset();
+        dispatch(
+          propertyUpdated({
+            ...selectedProperty,
+            ...data,
+          }),
+        );
+      } else {
+        dispatch(
+          propertyAdded({
+            ...data,
+            id: crypto.randomUUID(),
+            createdAt: new Date().toISOString(),
+          }),
+        );
+      }
+
+      handleReset();
+    } catch (err: unknown) {
+      setError('root', {
+        message: (err as Error).message ?? 'Invalid property update',
+      });
+    }
   };
 
   const handleReset = () => {
@@ -99,6 +113,8 @@ export const PropertyForm = () => {
         {...register('capacity', { valueAsNumber: true })}
       />
       {errors.capacity && <Error>{errors.capacity.message}</Error>}
+
+      {errors.root && <Error>{errors.root.message}</Error>}
 
       <Row>
         <Button type="submit">

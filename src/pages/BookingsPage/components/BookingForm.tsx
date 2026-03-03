@@ -5,8 +5,7 @@ import { addDays, format } from 'date-fns';
 
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
-  bookingAdded,
-  bookingUpdated,
+  saveBooking,
   bookingSelected,
 } from '../../../features/bookings/bookings.slice';
 
@@ -29,81 +28,68 @@ export const BookingForm = () => {
   const dispatch = useAppDispatch();
   const selectedBooking = useAppSelector(selectSelectedBooking);
   const properties = useAppSelector(selectAllProperties);
+  const loading = useAppSelector((state) => state.bookings.loading);
+  const domainError = useAppSelector((state) => state.bookings.error);
   const isEditing = Boolean(selectedBooking);
 
   const {
     register,
     handleSubmit,
     reset,
+    setError,
     formState: { errors },
   } = useForm<CreateBookingInput>({
     resolver: zodResolver(CreateBookingSchema),
     defaultValues: {
       propertyId: '',
-      guestName: '',
-      checkIn: format(addDays(new Date(), 0), 'yyyy-MM-dd'),
+      guests: 1,
+      checkIn: format(new Date(), 'yyyy-MM-dd'),
       checkOut: format(addDays(new Date(), 1), 'yyyy-MM-dd'),
     },
   });
 
-  // Prefill form when editing
   useEffect(() => {
     if (selectedBooking) {
-      const { propertyId, guestName, checkIn, checkOut } = selectedBooking;
-
       reset({
-        propertyId,
-        guestName,
-        checkIn: format(new Date(checkIn), 'yyyy-MM-dd'),
-        checkOut: format(new Date(checkOut), 'yyyy-MM-dd'),
+        propertyId: selectedBooking.propertyId,
+        guests: selectedBooking.guests,
+        checkIn: format(new Date(selectedBooking.checkIn), 'yyyy-MM-dd'),
+        checkOut: format(new Date(selectedBooking.checkOut), 'yyyy-MM-dd'),
       });
     }
   }, [selectedBooking, reset]);
 
-  const onSubmit = (data: CreateBookingInput) => {
-    // Assures we convert it to ISO format in the user's timezone.
-    const toIsoDatetimeString = (dateStr: string) =>
+  const onSubmit = async (data: CreateBookingInput) => {
+    const toIso = (dateStr: string) =>
       new Date(`${dateStr}T00:00:00`).toISOString();
 
-    const normalizedCheckIn = toIsoDatetimeString(data.checkIn);
-    const normalizedCheckOut = toIsoDatetimeString(data.checkOut);
+    const bookingPayload = {
+      id: selectedBooking?.id ?? crypto.randomUUID(),
+      propertyId: data.propertyId,
+      guests: data.guests,
+      checkIn: toIso(data.checkIn),
+      checkOut: toIso(data.checkOut),
+      createdAt: selectedBooking?.createdAt ?? new Date().toISOString(),
+    };
 
-    if (isEditing && selectedBooking) {
-      dispatch(
-        bookingUpdated({
-          id: selectedBooking.id,
-          propertyId: data.propertyId,
-          guestName: data.guestName,
-          checkIn: normalizedCheckIn,
-          checkOut: normalizedCheckOut,
-          createdAt: selectedBooking.createdAt,
-        }),
-      );
-    } else {
-      dispatch(
-        bookingAdded({
-          id: crypto.randomUUID(),
-          propertyId: data.propertyId,
-          guestName: data.guestName,
-          checkIn: normalizedCheckIn,
-          checkOut: normalizedCheckOut,
-          createdAt: new Date().toISOString(),
-        }),
-      );
+    const resultAction = await dispatch(saveBooking(bookingPayload));
+
+    if (saveBooking.rejected.match(resultAction)) {
+      setError('root', {
+        message: resultAction.payload ?? 'Failed to save booking',
+      });
+      return;
     }
 
     handleReset();
   };
 
   const handleReset = () => {
-    const today = new Date();
-    const tomorrow = addDays(today, 1);
-
     reset({
       propertyId: '',
-      guestName: '',
-      checkIn: format(today, 'yyyy-MM-dd'),
-      checkOut: format(tomorrow, 'yyyy-MM-dd'),
+      guests: 1,
+      checkIn: format(new Date(), 'yyyy-MM-dd'),
+      checkOut: format(addDays(new Date(), 1), 'yyyy-MM-dd'),
     });
 
     dispatch(bookingSelected(null));
@@ -114,7 +100,6 @@ export const BookingForm = () => {
       <SelectWrapper>
         <Select {...register('propertyId')}>
           <option value="">Select property</option>
-
           {properties.map((property) => (
             <option key={property.id} value={property.id}>
               {property.name}
@@ -122,24 +107,34 @@ export const BookingForm = () => {
           ))}
         </Select>
       </SelectWrapper>
-
       {errors.propertyId && <Error>{errors.propertyId.message}</Error>}
 
-      <Input placeholder="Guest Name" {...register('guestName')} />
-      {errors.guestName && <Error>{errors.guestName.message}</Error>}
+      <Input
+        type="number"
+        min={1}
+        placeholder="Guests"
+        {...register('guests', { valueAsNumber: true })}
+      />
+      {errors.guests && <Error>{errors.guests.message}</Error>}
 
       <Row>
         <Input type="date" {...register('checkIn')} />
         <Input type="date" {...register('checkOut')} />
       </Row>
-
       {(errors.checkIn || errors.checkOut) && (
         <Error>{errors.checkIn?.message || errors.checkOut?.message}</Error>
       )}
 
+      {errors.root && <Error>{errors.root.message}</Error>}
+      {domainError && !errors.root && <Error>{domainError}</Error>}
+
       <Row>
-        <Button type="submit">
-          {isEditing ? 'Update Booking' : 'Create Booking'}
+        <Button type="submit" disabled={loading}>
+          {loading
+            ? 'Saving...'
+            : isEditing
+              ? 'Update Booking'
+              : 'Create Booking'}
         </Button>
 
         {isEditing && (

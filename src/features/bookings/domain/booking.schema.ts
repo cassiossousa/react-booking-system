@@ -8,7 +8,7 @@ import {
 export const BookingSchema = z.object({
   id: z.uuid(),
   propertyId: z.uuid(),
-  guestName: z.string().min(2, 'Guest name is required'),
+  guests: z.number().int().min(1),
   checkIn: z.iso.datetime(),
   checkOut: z.iso.datetime(),
   createdAt: z.iso.datetime(),
