@@ -2,6 +2,8 @@
 
 A fully responsive booking management system built with React, TypeScript and Redux Toolkit.
 
+IT IS LIVE! Check it out at [https://cassiossousa.github.io/react-booking-system/](https://cassiossousa.github.io/react-booking-system/)
+
 ## Features
 
 - Create booking
