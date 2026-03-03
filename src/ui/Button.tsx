@@ -1,7 +1,9 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+export type ButtonVariant = 'primary' | 'danger' | 'ghost';
 
 interface Props {
-  $variant?: 'primary' | 'danger' | 'ghost';
+  $variant?: ButtonVariant;
 }
 
 export const Button = styled.button<Props>`
@@ -15,24 +17,30 @@ export const Button = styled.button<Props>`
   ${({ $variant, theme }) => {
     switch ($variant) {
       case 'danger':
-        return `
+        return css`
           background: ${theme.colors.danger};
           color: white;
         `;
       case 'ghost':
-        return `
+        return css`
           background: transparent;
           border: 1px solid ${theme.colors.border};
         `;
       default:
-        return `
+        return css`
           background: ${theme.colors.primary};
           color: white;
         `;
     }
   }}
 
-  &:hover {
+  &:hover:not(:disabled) {
     transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
   }
 `;
