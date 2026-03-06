@@ -37,6 +37,7 @@ export const BookingCard = ({
       onDelete={() => onDelete(booking.id)}
       confirmTitle="Delete Booking"
       confirmDescription="Are you sure you want to delete this booking?"
+      data-testid="booking-card"
     />
   );
 };

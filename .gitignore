@@ -28,3 +28,7 @@ coverage/
 
 # Vite timestamps
 vite.config.ts.timestamp-*
+
+# Cypress test artifacts
+cypress/screenshots/
+cypress/videos/

@@ -64,6 +64,18 @@ export default defineConfig([
     },
   },
 
+  // Cypress config
+  {
+    files: ['cypress/**/*.{ts,js}'],
+    languageOptions: {
+      parser: tseslint.parser,
+      globals: globals.browser,
+    },
+    rules: {
+      '@typescript-eslint/no-namespace': 'off',
+    },
+  },
+
   // Disable formatting rules that conflict with Prettier
   eslintConfigPrettier,
 ]);

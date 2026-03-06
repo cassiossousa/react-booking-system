@@ -45,7 +45,12 @@ export const EditableCard = ({
         {body}
 
         <Actions>
-          <Button $variant="ghost" disabled={actionsDisabled} onClick={onEdit}>
+          <Button
+            $variant="ghost"
+            disabled={actionsDisabled}
+            onClick={onEdit}
+            data-testid="edit-button"
+          >
             {isEditing ? 'Editing...' : 'Edit'}
           </Button>
 
@@ -53,6 +58,7 @@ export const EditableCard = ({
             $variant="danger"
             disabled={actionsDisabled}
             onClick={() => setConfirmOpen(true)}
+            data-testid="delete-button"
           >
             Delete
           </Button>

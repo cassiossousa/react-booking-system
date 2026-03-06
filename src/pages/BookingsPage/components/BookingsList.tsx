@@ -38,7 +38,7 @@ export const BookingsList = () => {
   }
 
   return (
-    <Wrapper>
+    <Wrapper data-testid="bookings-list">
       {bookings.map((booking) => (
         <BookingCard
           key={booking.id}

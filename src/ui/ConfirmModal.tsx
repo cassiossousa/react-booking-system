@@ -52,11 +52,19 @@ export const ConfirmModal = ({
         <p>{description}</p>
 
         <Actions>
-          <Button $variant="ghost" onClick={onCancel}>
+          <Button
+            $variant="ghost"
+            onClick={onCancel}
+            data-testid="cancel-delete"
+          >
             {cancelText}
           </Button>
 
-          <Button $variant={confirmVariant} onClick={onConfirm}>
+          <Button
+            $variant={confirmVariant}
+            onClick={onConfirm}
+            data-testid="confirm-delete"
+          >
             {confirmText}
           </Button>
         </Actions>

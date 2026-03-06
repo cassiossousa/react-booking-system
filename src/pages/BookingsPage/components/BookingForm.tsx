@@ -102,10 +102,14 @@ export const BookingForm = () => {
   };
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form onSubmit={handleSubmit(onSubmit)} data-testid="booking-form">
       <Field label="Property" error={errors.propertyId?.message}>
         <SelectWrapper $hasError={!!errors.propertyId}>
-          <select {...register('propertyId')} disabled={!properties.length}>
+          <select
+            {...register('propertyId')}
+            disabled={!properties.length}
+            data-testid="property-select"
+          >
             {properties.map((property) => (
               <option key={property.id} value={property.id}>
                 {property.name}
@@ -121,26 +125,45 @@ export const BookingForm = () => {
           min={1}
           $hasError={!!errors.guests}
           {...register('guests', { valueAsNumber: true })}
+          data-testid="guests-input"
         />
       </Field>
 
       <Field label="Check-in">
-        <Input type="date" {...register('checkIn')} />
+        <Input
+          type="date"
+          {...register('checkIn')}
+          data-testid="check-in-input"
+        />
       </Field>
 
       <Field label="Check-out">
-        <Input type="date" {...register('checkOut')} />
+        <Input
+          type="date"
+          {...register('checkOut')}
+          data-testid="check-out-input"
+        />
       </Field>
 
       {(errors.checkIn || errors.checkOut) && (
-        <Error>{errors.checkIn?.message || errors.checkOut?.message}</Error>
+        <Error data-testid="date-error">
+          {errors.checkIn?.message || errors.checkOut?.message}
+        </Error>
       )}
 
-      {errors.root && <Error>{errors.root.message}</Error>}
-      {domainError && !errors.root && <Error>{domainError}</Error>}
+      {errors.root && (
+        <Error data-testid="form-error">{errors.root.message}</Error>
+      )}
+      {domainError && !errors.root && (
+        <Error data-testid="domain-error">{domainError}</Error>
+      )}
 
       <Row>
-        <Button type="submit" disabled={loading || !isValid}>
+        <Button
+          type="submit"
+          disabled={loading || !isValid}
+          data-testid="submit-button"
+        >
           {loading
             ? 'Saving...'
             : isEditing
@@ -149,7 +172,12 @@ export const BookingForm = () => {
         </Button>
 
         {isEditing && (
-          <Button type="button" $variant="ghost" onClick={handleReset}>
+          <Button
+            type="button"
+            $variant="ghost"
+            onClick={handleReset}
+            data-testid="cancel-button"
+          >
             Cancel
           </Button>
         )}
